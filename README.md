@@ -10,6 +10,8 @@ Simple checklist application for QA/testing purposes
 
 * git clone
 * npm install
+* create database "checklists" with 'db/createdb.sql'
+* if you have non-defult postgresql credentials - fix it in 'config/config.js'
 
 
 ## TODO
