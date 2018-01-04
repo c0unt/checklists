@@ -8,8 +8,8 @@ Simple checklist application for QA/testing purposes
 
 ## installation
 
-git clone
-npm install
+* git clone
+* npm install
 
 
 ## TODO
