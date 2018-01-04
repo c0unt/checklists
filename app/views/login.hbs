@@ -11,27 +11,31 @@
 
 -->
 <div class="container">
-    <div class="row">
-        <div class="col-md-offset-5 col-md-3">
-            <div class="form-login">
-                <form action="./login" method="post" id="auth">
-                    <h4>Log in:</h4>
-                        <input type="text" name="userName" id="userName" class="form-control input-sm chat-input" placeholder="username" />
-                    </br>
-                        <input type="password" name="userPassword" id="userPassword" class="form-control input-sm chat-input" placeholder="password" />
-                    </br>
-                    <div class="wrapper">
-                       <!--
+  <div class="row">
+    <div class="col-md-offset-5 col-md-3">
+      <div class="form-login">
+        <form action="./login" method="post" id="auth">
+          <h4>Log in:</h4>
+          <input type="text" name="userName" id="userName" class="form-control input-sm chat-input" placeholder="username" />
+          </br>
+          <input type="password" name="userPassword" id="userPassword" class="form-control input-sm chat-input" placeholder="password" />
+          </br>
+          <div class="wrapper">
+            <!--
                         <span class="group-btn">
                             <a href="#" class="btn btn-primary btn-md">login <i class="fa fa-sign-in"></i></a>
                         </span>
                         -->
-                    </div>
-                    <button type="submit" form="auth" value="Submit" class="btn btn-primary btn-md">Login</button>
-                </form>
-
-            </div>
+          </div>
+          <button type="submit" form="auth" value="Submit" class="btn btn-primary btn-md">Login</button>
+        </form>
+        <div>
+          <p align="center">default user: admin </p>
+          <p align="center">default password: admin </p>
 
         </div>
+      </div>
+
     </div>
+  </div>
 </div>

@@ -1,25 +1,23 @@
-
-
 <div id="ReportsList" class="container">
-    <h2>Reports list</h2>
-    <div class="btn-group">
-    
+  <h2>Reports list</h2>
+  <div class="btn-group">
 
-    </div>
 
-    <div class="list-group">
+  </div>
+
+  <div class="list-group">
     {{#each this}}
-        {{#if v_id}} {{! провека на пустую запись}}
-            <a href="/reports/getFilter?v_id={{v_id}}" class="list-group-item">
+      {{#if v_id}} {{! провека на пустую запись}}
+        <a href="/reports/getFilter?v_id={{v_id}}" class="list-group-item">
                 <span class="badge label-primary">{{r_name}}</span>
                 <h4 class="list-group-item-heading">{{v_name}}</h4>
 
             </a>
 
 
-        {{/if}}
+      {{/if}}
 
 
     {{/each}}
-    </div>
+  </div>
 </div>

@@ -207,8 +207,8 @@ exports.getView = function(req, res) {
       return console.error('Error executing query', err.stack);
       console.log('error geting reports');
     } else {
-      resp.view_name=r.rows[0].v_name;
-      resp.datasets[0].name=r.rows[0].rds_name;
+      resp.view_name = r.rows[0].v_name;
+      resp.datasets[0].name = r.rows[0].rds_name;
 
       pool.query(r.rows[0].rds_query, data.params, (err, rr) => {
         if (err) {
@@ -227,7 +227,7 @@ exports.getView = function(req, res) {
         }
       })
     }
-  console.log('!!!');
+    console.log('!!!');
   })
   console.log('!');
 };
@@ -244,40 +244,40 @@ exports.getViewSingleDS = function(req, res) {
     data: []
   };
 
-    pool.query('select vs.name as v_name, rds.id as rds_id, rds.name as rds_name, rds.query as rds_query from ref_rpt_datasets rds inner join ref_rpt_report_datasets rrds on rrds.dataset_id=rds.id inner join ref_rpt_views vs on vs.report_id=rrds.report_id where  vs.id=$1', [data.v_id], (err, r) => {
-      if (err) {
-        console.log('SQL error');
-        return console.error('Error executing query', err.stack);
-        console.log('error geting reports');
-      } else {
-        resp.view_name=r.rows[0].v_name;
+  pool.query('select vs.name as v_name, rds.id as rds_id, rds.name as rds_name, rds.query as rds_query from ref_rpt_datasets rds inner join ref_rpt_report_datasets rrds on rrds.dataset_id=rds.id inner join ref_rpt_views vs on vs.report_id=rrds.report_id where  vs.id=$1', [data.v_id], (err, r) => {
+    if (err) {
+      console.log('SQL error');
+      return console.error('Error executing query', err.stack);
+      console.log('error geting reports');
+    } else {
+      resp.view_name = r.rows[0].v_name;
       //  resp.datasets['ds0']=r.rows[0].rds_name;
-        resp.datasets.push(r.rows[0].v_name);
+      resp.datasets.push(r.rows[0].v_name);
       //TODO  resp.datasets[0].name=r.rows[0].rds_name;
-        pool.query(r.rows[0].rds_query, data.params, (err, rr) => {
-          if (err) {
-            console.log('SQL error');
-            return console.error('Error executing query', err.stack);
-            console.log('error geting reports');
-          } else {
-            console.log(r.rows[0].rds_name);
-            console.log('=BEGIN=DATA==================');
-            console.log(rr.rows);
-            var d =[];
-            d = rr.rows;
-            resp.data = d;
-            console.log('=END=DATA====================');
-            console.log(resp);
-            res.render('reports/genericreport', resp);
+      pool.query(r.rows[0].rds_query, data.params, (err, rr) => {
+        if (err) {
+          console.log('SQL error');
+          return console.error('Error executing query', err.stack);
+          console.log('error geting reports');
+        } else {
+          console.log(r.rows[0].rds_name);
+          console.log('=BEGIN=DATA==================');
+          console.log(rr.rows);
+          var d = [];
+          d = rr.rows;
+          resp.data = d;
+          console.log('=END=DATA====================');
+          console.log(resp);
+          res.render('reports/genericreport', resp);
 
 
-          }
-        })
-      }
+        }
+      })
+    }
     console.log('!!!');
-    })
-    console.log('!');
-  };
+  })
+  console.log('!');
+};
 
 
 exports.report1 = function(req, res) {
