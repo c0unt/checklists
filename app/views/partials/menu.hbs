@@ -1,0 +1,61 @@
+{{#unless do_not_use_partial}}
+
+  <script>
+    function loadMenu() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("menu").innerHTML = xmlhttp.responseText;
+                document.getElementById("login").innerHTML = '';
+                document.getElementById("logout").innerHTML = ' <li><a href="../auth/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>';
+            }
+            else{
+                document.getElementById("menu").innerHTML = '';
+                document.getElementById("logout").innerHTML = '';
+            }
+        };
+        xmlhttp.open("GET", "../auth/getUserMenu", true);
+        xmlhttp.send();
+    }
+</script>
+
+
+<nav class="navbar navbar-inverse"  >
+    <div class="container-fluid" >
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../home">CheckLists </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav" id="menu">
+
+                <li><a href="#">Page 2</a></li>
+                <li><a href="#">Page 3</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="logout">
+                <li><a href="../auth/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" id="login">
+                <li><a href="../auth/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+
+        </div>
+    </div>
+
+
+</nav>
+<script type="text/javascript">
+    loadMenu();
+</script>
+
+{{/unless}}

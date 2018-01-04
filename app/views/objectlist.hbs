@@ -1,0 +1,28 @@
+
+
+<div id="ObjectList" class="container">
+    <h2>Objects list</h2>
+    <div class="btn-group">
+      <form action="/objects/addObject" method="get">
+
+        <button type="submit" class="btn btn-primary">Register New Object</button>
+      </form>
+
+    </div>
+
+    <div class="list-group">
+    {{#each this}}
+        {{#if id}} {{! провека на пустую запись}}
+            <a href="/objects/getObject?id={{id}}" class="list-group-item">
+                <span class="badge label-primary">код: {{code}}</span>
+                <h4 class="list-group-item-heading">{{name}}</h4>
+
+            </a>
+
+
+        {{/if}}
+
+
+    {{/each}}
+    </div>
+</div>

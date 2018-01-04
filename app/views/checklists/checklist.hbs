@@ -1,0 +1,69 @@
+<div class="container">
+
+  <h1>Checklist</h1>
+  </a>
+
+  <form action="/checklists/addChecklist" method="post">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+      <input id="id" type="text" class="form-control" name="id" readonly placeholder="id" value="{{checklist_id}}">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+      <input id="name" type="text" class="form-control" name="name" placeholder="Name" value="{{checklist_name}}">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+      <input id="version" type="text" class="form-control" name="version" placeholder="version" value="{{checklist_version}}">
+    </div>
+    <div class="checkbox">
+      <input id="status" name="status" type="checkbox" value="True"   {{#if checklist_status}} checked {{/if}} >
+      <label for="status" class="control-label">Checklist passed</label>
+    </div>
+
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="/checklists/getChecklistChecks?id={{checklist_id}}&name={{checklist_name}}" class="btn btn-primary">
+      Process...
+      </a>
+    </div>
+
+
+  </form>
+
+  <script>
+      function loadChecklistChecks() {
+          var xmlhttp;
+          if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp = new XMLHttpRequest();
+          }
+          else {// code for IE6, IE5
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+          }
+          xmlhttp.onreadystatechange = function () {
+              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                  document.getElementById("ChecklistChecks").innerHTML = xmlhttp.responseText;
+
+              }
+              else{
+                document.getElementById("ChecklistChecks").innerHTML = 'Error loading data! - thats, OK if getChecklistChecks method is not implemented';
+              }
+          };
+
+
+          xmlhttp.open("GET", "../checklists/getChecklistChecks?id={{checklist_id}}&name={{checklist_name}}&inrender=true", true);
+          xmlhttp.send();
+      }
+  </script>
+
+  <script type="text/javascript">
+      loadChecklistChecks();
+  </script>
+
+
+  <div class="container-fluid" id="ChecklistChecks">
+
+  </div>
+
+</div>

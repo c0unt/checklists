@@ -1,0 +1,65 @@
+<div class="container">
+
+  <h1>Checklist checks</h1>
+
+
+</div>
+
+
+<div class="container">
+
+  <h1>{{checklist_name}}</h1>
+    <blockquote>
+      <footer>ID: {{checklist_id}}</footer>
+    </blockquote>
+</div>
+<!--
+dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
+       dcc_check_order: 1,
+       dcc_name: 'test check',
+       dcc_content: 'do check',
+       dcc_comment: null,
+       dcc_pass: null,
+       dcc_pass_dts: null,
+       user_name: null
+     -->
+  <div class="table-responsive">
+   <table class="table">
+     <thead>
+       <tr>
+         <th>Check name</th>
+         <th>What to do</th>
+         <th>Mark</th>
+         <th>Comment</th>
+         <th>Time/User</th>
+         <th>Actions</th>
+       </tr>
+     </thead>
+     <tbody>
+       {{#each checks}}
+           <tr>
+             <td>{{this.dcc_name}}</td>
+             <td>{{this.dcc_content}}</td>
+             <td>{{this.dcc_pass}}</td>
+             <td>{{this.dcc_comment}}</td>
+             <td>{{this.dcc_pass_dts}}/{{this.user_name}}</td>
+             <td>
+               <div class="btn-group">
+
+                 <a href=# class="btn btn-primary">
+                 Action 1
+                 </a>
+                 <a href=# class="btn btn-primary">
+                 Action 2
+                 </a>
+               </div>
+             </td>
+           </tr>
+
+       {{/each}}
+
+     </tbody>
+   </table>
+   </div>
+
+</div>

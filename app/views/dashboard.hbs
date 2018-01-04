@@ -1,0 +1,41 @@
+
+
+<div class="container-fluid" id="DashBoardReport">
+
+</div>
+<script>
+    function loadReport1() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("report1").innerHTML = xmlhttp.responseText;
+
+            }
+            else{
+              document.getElementById("DashBoardReport").innerHTML = 'Error loading data! - thats, OK if getDashBoardReport method is not implemented';
+            }
+        };
+        xmlhttp.open("GET", "../reports/getDashBoardReport", true);
+        xmlhttp.send();
+    }
+</script>
+
+<script type="text/javascript">
+    loadReport1();
+</script>
+
+<div class="container-fluid">
+  <h2>Description</h2>
+  <h4>Checklists</h4>
+  - The main thing - clean and simple checklists
+  <h4>Users</h4>
+  - Create new users here
+  <h4>Reports </h4>
+  - Here you can find some reports
+</div>

@@ -1,0 +1,44 @@
+<div id="ChecklistsList" class="container">
+  <h2>Locations list</h2>
+  <div class="btn-group">
+    <form action="/checklists/addChecklist" method="get">
+
+      <button type="submit" class="btn btn-primary">Add New Checklist</button>
+    </form>
+
+  </div>
+
+  <div class="list-group">
+    {{#each this}}
+      {{#if checklist_id}} {{! провека на пустую запись}}
+        {{#cond "this.checklist_status ===true"}}
+          <a href="/checklists/getChecklist?id={{checklist_id}}" class="list-group-item">
+          {{#if checklist_version}} {{! провека на пустую запись}}
+              <span class="badge label-primary">ver: {{checklist_version}}</span>
+          {{/if}}
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-ok"></span>{{checklist_name}}</h4>
+          </a>
+        {{/cond}}
+        {{#cond "this.checklist_status ===null"}}
+          <a href="/checklists/getChecklist?id={{checklist_id}}" class="list-group-item">
+          {{#if checklist_version}} {{! провека на пустую запись}}
+              <span class="badge label-primary">ver: {{checklist_version}}</span>
+          {{/if}}
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-list-alt"></span>{{checklist_name}}</h4>
+          </a>
+        {{/cond}}
+        {{#cond "this.checklist_status ===false"}}
+          <a href="/checklists/getChecklist?id={{checklist_id}}" class="list-group-item">
+          {{#if checklist_version}} {{! провека на пустую запись}}
+              <span class="badge label-primary">ver: {{checklist_version}}</span>
+          {{/if}}
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-remove"></span>{{checklist_name}}</h4>
+          </a>
+        {{/cond}}
+
+      {{/if}}
+
+
+    {{/each}}
+  </div>
+</div>

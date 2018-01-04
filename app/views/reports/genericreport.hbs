@@ -1,0 +1,36 @@
+<div class="container">
+
+  <h1>{{view_name}}</h1>
+    <blockquote>
+      <footer>ID: {{view_id}}</footer>
+    </blockquote>
+</div>
+
+  <div class="table-responsive">
+   <table class="table">
+     <thead>
+       <tr>
+         <th>DTS</th>
+         <th>Событие</th>
+         <th>Данные</th>
+         <th>Юзер</th>
+         <th>Токен</th>
+       </tr>
+     </thead>
+     <tbody>
+       {{#each data}}
+           <tr>
+             <td>{{this.dts}}</td>
+             <td>{{this.action}}</td>
+             <td>{{this.data}}</td>
+             <td>{{this.user}}</td>
+             <td>{{this.token}}</td>
+           </tr>
+
+       {{/each}}
+
+     </tbody>
+   </table>
+   </div>
+
+</div>

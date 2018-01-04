@@ -1,0 +1,19 @@
+{
+  "name": "application-name",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "express": "3.0.4",
+    "express-favicon": "^2.0.0",
+    "hbs": "*",
+    "less": "^2.7.2",
+    "less-middleware": "^2.2.1",
+    "node-postgres-named": "^2.4.1",
+    "utilities": "^1.0.5",
+    "uuid-validate": "0.0.2"
+  }
+}

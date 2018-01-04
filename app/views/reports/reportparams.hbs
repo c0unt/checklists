@@ -1,0 +1,45 @@
+<div class="container">
+
+  <h2>Report params</h2>
+
+
+  <form action="/reports/getView" method="POST">
+
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+      <input id="id" type="text" class="form-control" name="view_id" readonly placeholder="{{view_id}}" value="{{view_id}}">
+    </div>
+
+    {{#each params}}
+
+      {{#cond "this.p_kind ==='date'"}}
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          <input type='text' class="form-control" id="{{this.p_sys_name}}" name="{{this.p_sys_name}}"/>
+
+          <script type="text/javascript">
+            $(function() {
+              $('#{{this.p_sys_name}}').datetimepicker({
+                format: 'DD.MM.YYYY'
+              });
+            });
+          </script>
+
+        </div>
+      {{/cond}}
+      {{#cond "this.p_kind ==='text'"}}
+        <div class="input-group">
+          <span class="input-group-addon">{{this.p_name}} <i></i></span>
+          <input id="{{this.p_sys_name}}" type="text" class="form-control" name="{{this.p_sys_name}}" placeholder="{{this.p_default}}" >
+        </div>
+      {{/cond}}
+
+
+    {{/each}}
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">Show report</button>
+    </div>
+
+  </form>
+
+</div>
