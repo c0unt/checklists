@@ -1,7 +1,7 @@
 # Checklists
 Simple checklist application for QA/testing purposes
 
-(draft, non-production)
+(draft, non-production, a lot of work has to be done)
 
 ## General workflow
 
