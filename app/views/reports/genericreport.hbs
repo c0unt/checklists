@@ -7,30 +7,28 @@
 </div>
 
   <div class="table-responsive">
-   <table class="table">
-     <thead>
+  <table class="table">
+    
+  {{#each data}}
+     
+      {{#if @first}}
+       <thead>
+        {{#each this}}
+          <th>{{@key}}</th>  
+        {{/each}}
+        </thead>
+        <tbody>
+      {{else}}  
        <tr>
-         <th>DTS</th>
-         <th>Событие</th>
-         <th>Данные</th>
-         <th>Юзер</th>
-         <th>Токен</th>
-       </tr>
-     </thead>
-     <tbody>
-       {{#each data}}
-           <tr>
-             <td>{{this.dts}}</td>
-             <td>{{this.action}}</td>
-             <td>{{this.data}}</td>
-             <td>{{this.user}}</td>
-             <td>{{this.token}}</td>
-           </tr>
-
-       {{/each}}
-
-     </tbody>
-   </table>
-   </div>
+        {{#each this}}
+          {{@value}} <td>{{this}}</td>  
+        {{/each}}
+         </tr>
+      {{/if}}
+   
+  {{/each}}
+  </tbody>
+  </table>
+  </div>
 
 </div>

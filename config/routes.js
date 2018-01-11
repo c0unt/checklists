@@ -38,7 +38,7 @@ module.exports = function(app) {
   app.post('/reports/getView', Reports.getViewSingleDS);
   //app.post('/reports/getView',Reports.getView);
   app.get('/reports/report1', Reports.report1);
-  app.get('/reports/test', Reports.test)
+ 
 
 
 

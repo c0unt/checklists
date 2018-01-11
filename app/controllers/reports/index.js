@@ -7,11 +7,11 @@ const {
   Pool
 } = require('pg');
 
-var async = require("async");
+const async = require("async");
 //var pg = require('pg');
 const named = require('node-postgres-named');
 
-var config = require('../../../config/config');
+const config = require('../../../config/config');
 
 const uuidv4 = require('uuid/v4');
 
@@ -39,19 +39,14 @@ exports.index = function(req, res) {
   pool.query('select r.id as r_id, r.name as r_name, v.id as v_id, v.name as v_name from ref_rpt_reports r inner join ref_rpt_views v on v.report_id=r.id inner join ref_sys_users_x_rights ur on ur.right_id=v.right_id inner join tmp_sys_sessions ss on ss.user_id=ur.user_id where  ss.id=$1 and r.state=0 and v.state=0 order by r_name', [data.cookie], (err, r) => {
     if (err) {
       console.log('SQL error');
-      return console.error('Error executing query', err.stack);
-      // res.render('login');
+      console.error('Error executing query', err.stack);
       console.log('error geting reports');
     } else {
 
-      //  var menu = '<li class="active"><a href="#">Home</a></li>';
-      //  for (var i = 0; i < result.rowCount; i++) {
+     
       console.log(r.rows);
-      //      console.log(result.rows[i].path);
-      //      menu = menu + '<li><a href="' + result.rows[i].path + '">' + result.rows[i].name + '</a></li>';
       res.render('reports/reportslist', r.rows);
-      // }
-
+     
     }
 
   })
@@ -64,7 +59,7 @@ exports.getFilter = function(req, res) {
     cookie: req.cookies.session,
     v_id: req.query.v_id
   };
-  var resp = {
+  let resp = {
     view_id: data.v_id,
     params: ""
   };
@@ -166,12 +161,12 @@ exports.getView = function(req, res) {
 
 
 exports.getView = function(req, res) {
-  var data = {
+  let data = {
     cookie: req.cookies.session,
     v_id: req.body.view_id,
     params: req.body
   };
-  var resp = {
+  let resp = {
     view_id: data.v_id,
     datasets: "",
     data: ""
@@ -185,13 +180,13 @@ exports.getView = function(req, res) {
     pool.query(item.rds_query, data.params, (err, rr) => {
       if (err) {
         console.log('SQL error');
-        return console.error('Error executing query', err.stack);
+        console.error('Error executing query', err.stack);
         console.log('error geting reports');
       } else {
         console.log(item.rds_name);
         console.log('=BEGIN=DATA==================');
         console.log(rr.rows);
-        var d = rr.rows;
+        let d = rr.rows;
         resp.data[index] = d;
         console.log('=END=DATA====================');
 
@@ -204,7 +199,7 @@ exports.getView = function(req, res) {
   pool.query('select vs.name as v_name, rds.id as rds_id, rds.name as rds_name, rds.query as rds_query from ref_rpt_datasets rds inner join ref_rpt_report_datasets rrds on rrds.dataset_id=rds.id inner join ref_rpt_views vs on vs.report_id=rrds.report_id where  vs.id=$1', [data.v_id], (err, r) => {
     if (err) {
       console.log('SQL error');
-      return console.error('Error executing query', err.stack);
+       console.error('Error executing query', err.stack);
       console.log('error geting reports');
     } else {
       resp.view_name = r.rows[0].v_name;
@@ -213,13 +208,13 @@ exports.getView = function(req, res) {
       pool.query(r.rows[0].rds_query, data.params, (err, rr) => {
         if (err) {
           console.log('SQL error');
-          return console.error('Error executing query', err.stack);
+          console.error('Error executing query', err.stack);
           console.log('error geting reports');
         } else {
           console.log(r.rows[0].rds_name);
           console.log('=BEGIN=DATA==================');
           console.log(rr.rows);
-          var d = rr.rows;
+          let d = rr.rows;
           resp.data[0] = d;
           console.log('=END=DATA====================');
 
@@ -233,12 +228,12 @@ exports.getView = function(req, res) {
 };
 
 exports.getViewSingleDS = function(req, res) {
-  var data = {
+  let data = {
     cookie: req.cookies.session,
     v_id: req.body.view_id,
     params: req.body
   };
-  var resp = {
+  let resp = {
     view_id: data.v_id,
     datasets: [],
     data: []
@@ -247,7 +242,7 @@ exports.getViewSingleDS = function(req, res) {
   pool.query('select vs.name as v_name, rds.id as rds_id, rds.name as rds_name, rds.query as rds_query from ref_rpt_datasets rds inner join ref_rpt_report_datasets rrds on rrds.dataset_id=rds.id inner join ref_rpt_views vs on vs.report_id=rrds.report_id where  vs.id=$1', [data.v_id], (err, r) => {
     if (err) {
       console.log('SQL error');
-      return console.error('Error executing query', err.stack);
+      console.error('Error executing query', err.stack);
       console.log('error geting reports');
     } else {
       resp.view_name = r.rows[0].v_name;
@@ -257,13 +252,13 @@ exports.getViewSingleDS = function(req, res) {
       pool.query(r.rows[0].rds_query, data.params, (err, rr) => {
         if (err) {
           console.log('SQL error');
-          return console.error('Error executing query', err.stack);
+          console.error('Error executing query', err.stack);
           console.log('error geting reports');
         } else {
           console.log(r.rows[0].rds_name);
           console.log('=BEGIN=DATA==================');
           console.log(rr.rows);
-          var d = [];
+          let d = [];
           d = rr.rows;
           resp.data = d;
           console.log('=END=DATA====================');
@@ -295,8 +290,8 @@ exports.report1 = function(req, res) {
       // res.render('login');
       console.log('error geting data');
     } else {
-      var html = '<h2> Состояние очередей: </h2>';
-      for (var i = 0; i < result.rowCount; i++) {
+      let html = '<h2> Состояние очередей: </h2>';
+      for (let i = 0; i < result.rowCount; i++) {
 
         // console.log(result.rows[i].path);
         html = html + '<li class="list-group-item">' + result.rows[i].tag + '<span class="badge">' + result.rows[i].count + '</span>';
@@ -312,24 +307,3 @@ exports.report1 = function(req, res) {
 
 };
 
-exports.test = function(req, res) {
-  //res.send('Ok!');
-  async.waterfall([
-    function(callback) {
-      console.log('First Step --> ');
-      callback(null, '1', '2');
-    },
-    function(arg1, arg2, callback) {
-      console.log('Second Step --> ' + arg1 + ' ' + arg2);
-      callback(null, '3');
-    },
-    function(arg1, callback) {
-      console.log('Third Step --> ' + arg1);
-      callback(null, 'final result');
-    }
-  ], function(err, result) {
-    console.log('Main Callback --> ' + result);
-  });
-
-
-};

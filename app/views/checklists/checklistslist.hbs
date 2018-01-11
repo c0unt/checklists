@@ -16,7 +16,7 @@
           {{#if checklist_version}} {{! провека на пустую запись}}
               <span class="badge label-primary">ver: {{checklist_version}}</span>
           {{/if}}
-          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-ok"></span>{{checklist_name}}</h4>
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-ok"></span>&nbsp{{checklist_name}}</h4>
           </a>
         {{/cond}}
         {{#cond "this.checklist_status ===null"}}
@@ -24,7 +24,7 @@
           {{#if checklist_version}} {{! провека на пустую запись}}
               <span class="badge label-primary">ver: {{checklist_version}}</span>
           {{/if}}
-          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-list-alt"></span>{{checklist_name}}</h4>
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-list-alt"></span>&nbsp{{checklist_name}}</h4>
           </a>
         {{/cond}}
         {{#cond "this.checklist_status ===false"}}
@@ -32,7 +32,7 @@
           {{#if checklist_version}} {{! провека на пустую запись}}
               <span class="badge label-primary">ver: {{checklist_version}}</span>
           {{/if}}
-          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-remove"></span>{{checklist_name}}</h4>
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-remove"></span>&nbsp{{checklist_name}}</h4>
           </a>
         {{/cond}}
 
@@ -40,5 +40,16 @@
 
 
     {{/each}}
+
+
   </div>
+
+ <div class="text">
+  {{#each array as |value key|}}
+  {{#each child as |childValue childKey|}}
+    {{key}} - {{childKey}}. {{childValue}}
+  {{/each}}
+{{/each}}
+</div>
+
 </div>

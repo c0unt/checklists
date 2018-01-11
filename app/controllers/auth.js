@@ -6,7 +6,7 @@
   const {
     Pool
   } = require('pg');
-  var config = require('../../config/config');
+  const config = require('../../config/config');
 
   const pool = new Pool({
     user: config.pguser,
@@ -15,7 +15,7 @@
     password: config.pgpass,
     port: config.pgport
   })
-  var validate = require('uuid-validate');
+  const validate = require('uuid-validate');
 
   exports.logout = function(req, res) {
     /*
@@ -49,7 +49,7 @@
       cookie: req.cookies.session
     };
 
-    if (validate(data.cookie) != true) {
+    if (validate(data.cookie) !== true) {
       data.cookie = '00000000-0000-0000-0000-000000000000';
     };
 
@@ -65,7 +65,8 @@
     pool.query('SELECT id,dts FROM tmp_sys_sessions WHERE id=$1 and dts>now()', [data.cookie], (err, result) => {
       if (err) {
         console.log('SQL error');
-        return console.error('Error executing query', err.stack);
+        //return 
+        console.error('Error executing query', err.stack);
         //res.render('login');
         res.redirect('../login');
         console.log('login rendered 1');
@@ -147,7 +148,7 @@
     const data = {
       cookie: req.cookies.session
     };
-    if (validate(data.cookie) != true) {
+    if (validate(data.cookie) !== true) {
       data.cookie = '00000000-0000-0000-0000-000000000000';
     };
 
@@ -161,17 +162,16 @@
       ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id where ss.id=$1 and m.application_id=$2', [data.cookie, config.applicationID], (err, result) => {
         if (err) {
           console.log('SQL error');
-          return console.error('Error executing query', err.stack);
+          console.error('Error executing query', err.stack);
           res.render('login');
           console.log('login rendered 1');
+          
         } else {
           //  var menu = '<li class="active"><a href="../home">Home</a></li>';
-          var menu = '';
-          for (var i = 0; i < result.rowCount; i++) {
-
+          let menu = '';
+          for (let i = 0; i < result.rowCount; i++) {
             // console.log(result.rows[i].path);
             menu = menu + '<li><a href="' + result.rows[i].path + '">' + result.rows[i].name + '</a></li>';
-
           }
           if (menu == '') {
             res.status(403);

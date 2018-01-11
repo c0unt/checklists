@@ -6,7 +6,7 @@ Description: Checlists core module
 const {
   Pool
 } = require('pg');
-var config = require('../../../config/config');
+const config = require('../../../config/config');
 
 const uuidv4 = require('uuid/v4');
 
@@ -73,7 +73,7 @@ exports.addChecklist = function(req, res){
     }
     else{
         console.log('Got ID');
-        if (data.id==''){
+        if (data.id===''){
            data.id=uuidv4();
         };
 
@@ -87,8 +87,7 @@ exports.addChecklist = function(req, res){
             if (err) {
                 console.log('SQL error');
                 console.log([data.id, data.name,data.version, data.status, 0]);
-                return console.error('Error executing query', err.stack);
-
+                console.error('Error executing query', err.stack);
                 console.log('error update data_checklists 1');
             }
             else {
@@ -137,7 +136,7 @@ exports.getChecklistChecks = function(req, res){
         name: req.query.name,
         inrender: req.query.inrender ||false
     };
-    var resp = {
+    let resp = {
       do_not_use_partial:data.inrender,
       inrender:data.inrender,
       checklist_id: data.id,
@@ -147,7 +146,7 @@ exports.getChecklistChecks = function(req, res){
     pool.query('select dcc.id as dcc_id, dcc.check_order as dcc_check_order, dcc.name as dcc_name, dcc.content as dcc_content, dcc.comment as dcc_comment, dcc.pass as dcc_pass, dcc.pass_dts as dcc_pass_dts, u.name as user_name from data_checklist_content dcc left join ref_sys_users u on u.id=dcc.pass_user_id where dcc.checklist_id =$1 and dcc.state=0', [data.id], (err, r) => {
         if (err) {
             console.log('SQL error');
-            return console.error('Error executing query', err.stack);
+            console.error('Error executing query', err.stack);
             console.log('error geting getChecklistChecks 1');
         }
         else {
@@ -175,20 +174,17 @@ exports.getChecklistsSelect = function(req, res) {
 
   pool.query('', [data.cookie], (err, result) => {
     if (err) {
-      console.log('SQL error');
-      return console.error('Error executing query', err.stack);
-      // res.render('login');
-      console.log('error geting getChecklistsSelect 1');
+        console.log('SQL error');
+        console.error('Error executing query', err.stack);
+        console.log('error geting getChecklistsSelect 1');
     } else  {
-        var select = '<option value="">No checklist</option>';
-        for (var i = 0; i < result.rowCount; i++) {
+        let select = '<option value="">No checklist</option>';
+        for (let i = 0; i < result.rowCount; i++) {
           if (data.id_selected == result.rows[i].id){
-            // console.log(result.rows[i].path);
              select = select + '<option value="'+result.rows[i].id+'" selected>' + result.rows[i].name +' ('+result.rows[i].code+')'+'</option>';
 
           }
           else{
-            // console.log(result.rows[i].path);
              select = select + '<option value="'+result.rows[i].id+'">' + result.rows[i].name +' ('+result.rows[i].code+')'+'</option>';
 
           }
