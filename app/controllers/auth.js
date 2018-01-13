@@ -143,18 +143,21 @@
     /*
     Perform session check and return menu items
     */
-
-    //  console.log(req);
     const data = {
       cookie: req.cookies.session
     };
+
+    let resp = {
+      do_not_use_partial:true,
+      items:[]
+    };
+
     if (validate(data.cookie) !== true) {
       data.cookie = '00000000-0000-0000-0000-000000000000';
     };
 
     pool.query('delete  from tmp_sys_sessions where dts < now()', [], (err, result) => {
-      //  console.log(err);
-      //  console.log(result);
+   
     });
 
     pool.query(' SELECT m.name as name, m.path as path FROM ref_sys_menuitems m ' +
@@ -167,17 +170,9 @@
           console.log('login rendered 1');
           
         } else {
-          //  var menu = '<li class="active"><a href="../home">Home</a></li>';
-          let menu = '';
-          for (let i = 0; i < result.rowCount; i++) {
-            // console.log(result.rows[i].path);
-            menu = menu + '<li><a href="' + result.rows[i].path + '">' + result.rows[i].name + '</a></li>';
-          }
-          if (menu == '') {
-            res.status(403);
-          } else {
-            res.send(menu);
-          }
+          resp.items = result.rows
+          console.log(resp);
+          res.render('menu_data',resp);
 
         }
 
