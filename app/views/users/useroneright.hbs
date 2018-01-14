@@ -1,0 +1,16 @@
+
+
+             <td>  
+            <div class="btn-group">
+  
+                {{#cond "this.state===0"}} &nbsp; changed: granted
+               <a href=# onclick='setrigh("{{this.right_id}}",1)' class="btn btn-primary">
+                  <span class="glyphicon glyphicon-ok"></span>
+                 </a>
+               {{/cond}}
+               {{#cond "this.state===1"}} &nbsp; changed: revoked
+               <a href=# onclick='setrigh("{{this.right_id}}",0)' class="btn btn-primary">
+                  <span class="glyphicon glyphicon-remove"></span>
+                 </a>
+               {{/cond}}
+               </div>

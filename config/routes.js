@@ -20,6 +20,17 @@ module.exports = function(app) {
   var home = require('../app/controllers/home');
   app.get('/home', home.index);
 
+
+  var Users = require('../app/controllers/users/index');
+  app.get('/users', Users.index);
+  app.get('/users/addUser', Users.addUser);
+  app.post('/users/addUser', Users.addUser);
+  app.get('/users/getUser', Users.getUser);
+  app.get('/users/getUserRights',Users.getUserRights);
+  app.post('/users/setUserRight',Users.setUserRight);
+  
+
+
   var Checklists = require('../app/controllers/checklists/index');
   app.get('/checklists', Checklists.index);
   app.get('/checklists/addChecklist', Checklists.addChecklist);

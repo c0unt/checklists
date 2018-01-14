@@ -1,0 +1,97 @@
+<div class="container">
+
+  <h1>User</h1>
+  </a>
+
+  <form action="/Users/addUser" method="post">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+      <input id="id" type="text" class="form-control" name="id" readonly placeholder="id" value="{{id}}">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      <input id="name" type="text" class="form-control" name="name" placeholder="Name" value="{{name}}">
+    </div>
+{{#unless id }} 
+  <!-- password is set only then user is created or via separate function -->
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-question-sign"></i></span>
+      <input id="pass" type="password" class="form-control" name="pass" placeholder="Pass" value="{{pass}}">
+    </div>
+
+{{/unless}}
+
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+      <input id="version" type="email" class="form-control" name="email" placeholder="email" value="{{email}}">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
+      <input id="version" type="text" class="form-control" name="telegram" placeholder="telegram username" value="{{telegram}}">
+    </div>
+    
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+      {{#if id }} 
+      <a href=# class="btn btn-primary">
+        <!-- /TODO: implement this feature -->
+        Set Password
+      </a>
+      {{/if}}
+    </div>
+
+
+  </form>
+{{#if id }} <!-- this check is requed for more clear result -->
+  <script>
+      function loadUserRights() {
+          var xmlhttp;
+          if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp = new XMLHttpRequest();
+          }
+          else {// code for IE6, IE5
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+          }
+          xmlhttp.onreadystatechange = function () {
+              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                  document.getElementById("UserRights").innerHTML = xmlhttp.responseText;
+              }
+              else{
+                document.getElementById("UserRights").innerHTML = 'Error loading data! - thats, OK if getUserRights method is not implemented';
+              }
+          };
+
+
+          xmlhttp.open("GET", "../Users/getUserRights?id={{id}}&inrender=true", true);
+          xmlhttp.send();
+      }
+
+  
+      function setrigh(right,action) {
+         //alert(right)
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById(right).innerHTML = this.responseText;
+          }
+        };
+        xhttp.open("POST", "../Users/setUserRight", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("user={{id}}&inrender=true&action="+action+"&right="+right);
+      }
+  </script>
+ 
+  <script type="text/javascript">
+      loadUserRights();
+  </script>
+
+
+  <div class="container-fluid" id="UserRights">
+
+  </div>
+
+{{/if}}
+
+</div>

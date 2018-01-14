@@ -161,7 +161,7 @@
     });
 
     pool.query(' SELECT m.name as name, m.path as path FROM ref_sys_menuitems m ' +
-      ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id' +
+      ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 ' +
       ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id where ss.id=$1 and m.application_id=$2', [data.cookie, config.applicationID], (err, result) => {
         if (err) {
           console.log('SQL error');

@@ -1,0 +1,44 @@
+  <div class="table-responsive">
+   <table class="table">
+     <thead>
+       <tr>
+         <th>Right name</th>
+       
+         <th>Status
+      
+          <span class="label label-info">can be changed, all changes are saved immediately</span>
+         </th>
+       </tr>
+     </thead>
+     <tbody>
+       {{#each rights}}
+           <tr >
+             <td>{{this.right_name}}</td>
+              
+             <td id={{this.right_id}}>
+               <div class="btn-group">
+                 {{#cond "this.state===0"}}
+               <a href=# onclick='setrigh("{{this.right_id}}",1)' class="btn btn-primary">
+                  <span class="glyphicon glyphicon-ok"></span>
+                 </a>
+               {{/cond}}
+               {{#cond "this.state===1"}}
+               <a href=#  onclick='setrigh("{{this.right_id}}",0)' class="btn btn-primary">
+                   <span class="glyphicon glyphicon-remove"></span>
+                 </a>
+               {{/cond}}
+                 
+                 
+               </div>
+                </td>
+              
+            
+           </tr>
+
+       {{/each}}
+
+     </tbody>
+   </table>
+   </div>
+
+</div>

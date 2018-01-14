@@ -1,0 +1,38 @@
+<div id="UsersList" class="container">
+  <h2>Users list</h2>
+  <div class="btn-group">
+    <form action="/users/addUser" method="get">
+
+      <button type="submit" class="btn btn-primary">Add New User</button>
+    </form>
+
+  </div>
+
+  <div class="list-group">
+    {{#each this}}
+      {{#if id}} {{! провека на пустую запись}}
+        {{#cond "this.state===0"}}
+          <a href="/Users/getUser?id={{id}}" class="list-group-item">
+        
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-user"></span>&nbsp{{name}}</h4>
+          </a>
+        {{/cond}}
+        {{#cond "this.state ===1"}}
+          <a href="/Users/getUser?id={{id}}" class="list-group-item">
+          {{#if User_version}} {{! провека на пустую запись}}
+              <span class="badge label-primary">deleted</span>
+          {{/if}}
+          <h4 class="list-group-item-heading"> <span class="glyphicon glyphicon-list-alt"></span>&nbsp{{name}}</h4>
+          </a>
+        {{/cond}}
+       
+      {{/if}}
+
+
+    {{/each}}
+
+
+  </div>
+
+
+</div>
