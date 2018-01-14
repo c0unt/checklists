@@ -218,39 +218,6 @@ exports.setUserRight = function(req, res) {
 };
 
 
-exports.getChecklistsSelect = function(req, res) {
-  //res.render('index', {title: 'AG'});
-  const data = {
-    cookie: req.cookies.session,
-    id_selected: req.query.id_selected
-  };
-
-//TODO - getChecklistsSelect feature is not implemented
-
-  pool.query('', [data.cookie], (err, result) => {
-    if (err) {
-        console.log('SQL error');
-        console.error('Error executing query', err.stack);
-        console.log('error geting getChecklistsSelect 1');
-    } else  {
-        let select = '<option value="">No checklist</option>';
-        for (let i = 0; i < result.rowCount; i++) {
-          if (data.id_selected == result.rows[i].id){
-             select = select + '<option value="'+result.rows[i].id+'" selected>' + result.rows[i].name +' ('+result.rows[i].code+')'+'</option>';
-
-          }
-          else{
-             select = select + '<option value="'+result.rows[i].id+'">' + result.rows[i].name +' ('+result.rows[i].code+')'+'</option>';
-
-          }
-
-        }
-        res.send(select);
-    }
-
-  })
-
-};
 
 exports.test = function(req, res){
     res.send('Ok!');
