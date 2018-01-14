@@ -163,6 +163,47 @@ exports.getChecklistChecks = function(req, res){
 
 };
 
+
+exports.setOneCheck = function(req, res) {
+    const data = {
+        cookie: req.cookies.session,
+        user_id: req.body.user,
+        right_id: req.body.right,
+        action:  req.body.action,
+        inrender: req.body.inrender ||false
+    };
+    let resp = {
+        do_not_use_partial:data.inrender,
+        inrender:data.inrender,
+        user_id: data.user_id,
+        
+      };
+      console.log(data);
+      pool.query('insert into ref_sys_users_x_rights (user_id, right_id,state) values( $1, $2, $3 ) On Conflict on CONSTRAINT user_right_constraint DO UPDATE SET state=$3 returning id, user_id, right_id, state', [data.user_id, data.right_id,data.action], (err, r) => {
+          if (err) {
+              console.log('SQL error');
+              console.error('Error executing query', err.stack);
+              console.log('error geting setUserRight 1');
+          }
+          else {
+            console.log('setUserRight');
+              console.log(r.rows);
+              resp.id=r.rows[0].id;
+              resp.user_id=r.rows[0].user_id;
+              resp.right_id=r.rows[0].right_id;
+              resp.state=r.rows[0].state;
+              resp.do_not_use_partial=data.inrender;
+              resp.inrender=data.inrender;
+
+              console.log(resp);
+              res.render('users/useroneright',resp);
+  
+          }
+  
+      })
+
+};
+
 exports.getChecklistsSelect = function(req, res) {
   //res.render('index', {title: 'AG'});
   const data = {
