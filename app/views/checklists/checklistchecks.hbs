@@ -29,20 +29,20 @@ dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
      </thead>
      <tbody>
        {{#each checks}}
-           <tr>
+           <tr id="tr{{this.dcc_id}}">
              <td>{{this.dcc_name}}</td>
              <td>{{this.dcc_content}}</td>
-             <td>{{this.dcc_pass}}</td>
+             <td id="pass{{this.dcc_id}}">{{this.dcc_pass}}</td>
              <td>{{this.dcc_comment}}</td>
-             <td>{{this.dcc_pass_dts}}/{{this.user_name}}</td>
+             <td id="dts{{this.dcc_id}}">{{this.dcc_pass_dts}}/{{this.user_name}}</td>
              <td>
                <div class="btn-group">
 
-                 <a href=# class="btn btn-primary">
-                 Action 1
+                 <a href=# onclick='setcheck("{{this.dcc_id}}",true)' class="btn btn-primary">
+                 Check OK
                  </a>
-                 <a href=# class="btn btn-primary">
-                 Action 2
+                 <a href=# onclick='setcheck("{{this.dcc_id}}",false)' class="btn btn-primary">
+                 Check Fail
                  </a>
                </div>
              </td>

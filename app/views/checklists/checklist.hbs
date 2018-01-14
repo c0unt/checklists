@@ -24,8 +24,8 @@
 
     <div class="btn-group">
       <button type="submit" class="btn btn-primary">Save</button>
-      <a href="/checklists/getChecklistChecks?id={{checklist_id}}&name={{checklist_name}}" class="btn btn-primary">
-      Process...
+      <a href="/checklists/cloneChecklist?id={{checklist_id}}" class="btn btn-primary">
+      Clone...
       </a>
     </div>
 
@@ -54,6 +54,23 @@
 
           xmlhttp.open("GET", "../checklists/getChecklistChecks?id={{checklist_id}}&name={{checklist_name}}&inrender=true", true);
           xmlhttp.send();
+      };
+
+
+      function setcheck(dcc_id,check) {
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+          document.getElementById("pass"+dcc_id).innerHTML = myObj.pass;
+          document.getElementById("dts"+dcc_id).innerHTML = myObj.pass_dts;
+      
+          }
+        };
+        xhttp.open("POST", "../checklists/setOneCheck", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("dcc_id="+dcc_id+"&inrender=true&dcc_pass="+check);
       }
   </script>
 

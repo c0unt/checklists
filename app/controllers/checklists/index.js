@@ -167,9 +167,8 @@ exports.getChecklistChecks = function(req, res){
 exports.setOneCheck = function(req, res) {
     const data = {
         cookie: req.cookies.session,
-        user_id: req.body.user,
-        right_id: req.body.right,
-        action:  req.body.action,
+        dcc_id: req.body.dcc_id,
+        dcc_pass: req.body.dcc_pass,
         inrender: req.body.inrender ||false
     };
     let resp = {
@@ -179,24 +178,26 @@ exports.setOneCheck = function(req, res) {
         
       };
       console.log(data);
-      pool.query('insert into ref_sys_users_x_rights (user_id, right_id,state) values( $1, $2, $3 ) On Conflict on CONSTRAINT user_right_constraint DO UPDATE SET state=$3 returning id, user_id, right_id, state', [data.user_id, data.right_id,data.action], (err, r) => {
+      pool.query('UPDATE "data_checklist_content" SET pass_dts=now(), "pass" = $3, pass_user_id=(select user_id from tmp_sys_sessions where id=$1) WHERE "id" = $2 returning id,checklist_id, pass, pass_dts, pass_user_id', [data.cookie, data.dcc_id, data.dcc_pass], (err, r) => {
           if (err) {
               console.log('SQL error');
               console.error('Error executing query', err.stack);
-              console.log('error geting setUserRight 1');
+              console.log('error geting setOneCheck 1');
           }
           else {
-            console.log('setUserRight');
+            console.log('setOneCheck');
               console.log(r.rows);
               resp.id=r.rows[0].id;
-              resp.user_id=r.rows[0].user_id;
-              resp.right_id=r.rows[0].right_id;
-              resp.state=r.rows[0].state;
+              resp.user_id=r.rows[0].pass_user_id;
+              resp.pass=r.rows[0].pass;
+              resp.pass_dts=r.rows[0].pass_dts;
               resp.do_not_use_partial=data.inrender;
               resp.inrender=data.inrender;
 
               console.log(resp);
-              res.render('users/useroneright',resp);
+              res.type('application/json');
+              res.send(resp);
+              //res.render('checklists/onecheck',resp);
   
           }
   
