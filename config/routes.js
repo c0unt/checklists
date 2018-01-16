@@ -8,10 +8,13 @@ module.exports = function(app) {
   var auth = require('../app/controllers/auth');
   app.post('*login', auth.login);
   app.get('*login', auth.login);
+
+  app.get('*getUserMenu', auth.checksession);
   app.get('*getUserMenu', auth.getUserMenu);
 
   app.get('/*', auth.checksession);
   app.post('/*', auth.checksession);
+  
   app.get('/auth/test', auth.test);
   app.get('*logout', auth.logout);
 

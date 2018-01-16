@@ -46,7 +46,8 @@
 
     //  console.log(req);
     const data = {
-      cookie: req.cookies.session
+      cookie: req.cookies.session,
+      inrender: req.query.inrender ||false
     };
 
     if (validate(data.cookie) !== true) {
@@ -77,8 +78,14 @@
         } else {
           console.log('checksession session FAIL!!!');
           //res.render('login');
+          if (data.inrender){
+          //res.render('',data);
+          res.status(403).send('');
+          } else {
           res.redirect('../login');
+          }
           console.log('login rendered 2');
+
         }
 
       };
