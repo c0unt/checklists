@@ -31,7 +31,7 @@ module.exports = function(app) {
   app.get('/users/getUser', Users.getUser);
   app.get('/users/getUserRights',Users.getUserRights);
   app.post('/users/setUserRight',Users.setUserRight);
-  
+  app.post('/users/setUserPass',Users.setUserPass);
 
 
   var Checklists = require('../app/controllers/checklists/index');

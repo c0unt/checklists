@@ -34,17 +34,62 @@
     <div class="btn-group">
       <button type="submit" class="btn btn-primary">Save</button>
       {{#if id }} 
-      <a href=# class="btn btn-primary">
-        <!-- /TODO: implement this feature -->
-        Set Password
-      </a>
+        <button type="button" class="btn btn-primary"  onclick="showsetpassdialog()">Set password</button>
       {{/if}}
     </div>
-
-
   </form>
+   <div id="passblock" style="display:none">
+    <div id="passmessage">
+    </div>  
+     <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-question-sign"></i></span>
+      <input id="pass1" type="password" class="form-control" name="pass" placeholder="new password" >
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-question-sign"></i></span>
+      <input id="pass2" type="password" class="form-control" name="pass" placeholder="repeat" >
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="setpass()">Set</button>
+   </div>  
+     
+
 {{#if id }} <!-- this check is requed for more clear result -->
   <script>
+
+function setpass() {
+        var u = document.getElementById("id").value;
+        var p1 = document.getElementById("pass1").value;
+        var p2 = document.getElementById("pass2").value;
+        if (p1===p2){
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("passmessage").innerHTML = this.responseText;
+          }else{
+            document.getElementById("passmessage").innerHTML='err:'+this.status;
+          }
+
+        };
+     
+        xhttp.open("POST", "../Users/setUserPass", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("user="+u+"&inrender=true&pass="+p1);
+        }else{
+          document.getElementById("passmessage").innerHTML='Passwords must match';
+          
+        }
+
+      }
+
+    function showsetpassdialog() {
+    var x = document.getElementById("passblock");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
       function loadUserRights() {
           var xmlhttp;
           if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
