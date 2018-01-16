@@ -217,6 +217,49 @@ exports.setUserRight = function(req, res) {
 
 };
 
+exports.setUserPass = function(req, res) {
+    const data = {
+        cookie: req.cookies.session,
+        user_id: req.body.user,
+        pass: req.body.pass,
+        inrender: req.body.inrender ||false
+    };
+    let resp = {
+        do_not_use_partial:data.inrender,
+        inrender:data.inrender
+      };
+
+      console.log(data);
+      //TODO: need to check rights here...
+      pool.query('update ref_sys_users set pass=$2 where id=$1', [data.user_id, data.pass], (err, r) => {
+          if (err) {
+              console.log('SQL error');
+              console.error('Error executing query', err.stack);
+              console.log('error geting setUserPass 1');
+              resp.user_id=data.user_id;
+              resp.message='Fail';
+              resp.do_not_use_partial=data.inrender;
+              resp.inrender=data.inrender;
+
+              console.log(resp);
+              res.render('users/usersetpass',resp);
+          }
+          else {
+            console.log('setUserPass');
+              console.log(r.rows);
+              resp.user_id=data.user_id;
+              resp.message='Ok';
+              resp.do_not_use_partial=data.inrender;
+              resp.inrender=data.inrender;
+
+              console.log(resp);
+              res.render('users/usersetpass',resp);
+  
+          }
+  
+      })
+
+};
 
 
 exports.test = function(req, res){
