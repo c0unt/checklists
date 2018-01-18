@@ -69,8 +69,9 @@
         //return 
         console.error('Error executing query', err.stack);
         //res.render('login');
-        res.redirect('../login');
-        console.log('login rendered 1');
+       // res.redirect('../login');
+        res.status(403).send('');
+        //console.log('login rendered 1');
       } else {
         if (result.rowCount === 1) {
           console.log('checksession session Ok');
@@ -104,6 +105,9 @@
       pass: req.body.userPassword
     };
     console.log(data);
+    let resp ={
+      message:''
+    };
 
     if (req.method === 'GET') {
       res.render('login');
@@ -113,9 +117,10 @@
 
       pool.query('SELECT id FROM ref_sys_users WHERE state=0 and (email=$1 or name=$1)  and pass=$2', [data.name, data.pass], (err, result) => {
         if (err) {
+          resp.message =  err.stack;
           console.log('SQL error');
-          return console.error('Error executing query', err.stack);
-          res.render('login');
+          console.error('Error executing query', err.stack);
+          res.render('login',resp);
           console.log('login rendered 2');
         } else {
           console.log(result.rowCount);
@@ -123,7 +128,7 @@
             pool.query('Insert into tmp_sys_sessions (user_id) values ($1) returning id as session, dts as untill', [result.rows[0].id], (err, result) => {
               if (err) {
                 console.log('SQL session error');
-                return console.error('Error executing query', err.stack);
+                console.error('Error executing query', err.stack);
                 //error creating session
                 res.render('login');
                 console.log('login rendered 3');

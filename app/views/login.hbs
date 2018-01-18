@@ -29,6 +29,11 @@
           </div>
           <button type="submit" form="auth" value="Submit" class="btn btn-primary btn-md">Login</button>
         </form>
+        {{#if message}}
+        <div class="alert alert-danger">
+          {{message}}
+        </div>
+        {{/if}}
         <div>
           <p align="center">default user: admin </p>
           <p align="center">default password: admin </p>
