@@ -90,13 +90,13 @@ function addcheck() {
               xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
           }
           xmlhttp.onreadystatechange = function () {
-              if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              if (xmlhttp.readyState == 4 && xmlhttp.status == 200 ) {
                   document.getElementById("ChecklistChecks").innerHTML = xmlhttp.responseText;
 
               }
-              else{
-                document.getElementById("ChecklistChecks").innerHTML = 'Error loading data! - thats, OK if getChecklistChecks method is not implemented';
-              }
+             // else{
+             //   document.getElementById("ChecklistChecks").innerHTML = 'Error loading data! - thats, OK if getChecklistChecks method is not implemented';
+             // }
           };
 
 
