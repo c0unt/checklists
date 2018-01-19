@@ -163,6 +163,83 @@ exports.getChecklistChecks = function(req, res){
 
 };
 
+exports.addCheck = function(req, res) {
+    const data = {
+        cookie: req.cookies.session,
+        id: req.body.id,
+        newcheck_name: req.body.newcheck_name,
+        newcheck_descr: req.body.newcheck_descr,
+        inrender: req.body.inrender ||false
+    };
+    let resp = {
+        do_not_use_partial:data.inrender,
+        inrender:data.inrender
+      };
+      console.log(data);
+      pool.query('Insert into "data_checklist_content" (checklist_id, name, content) values ($1,$2,$3)returning id, name, content, checklist_id, pass, pass_dts, pass_user_id', [data.id, data.newcheck_name, data.newcheck_descr], (err, r) => {
+          if (err) {
+              console.log('SQL error');
+              console.error('Error executing query', err.stack);
+              console.log('error geting addCheck 1');
+          }
+          else {
+            console.log('addCheck');
+              console.log(r.rows);
+              resp.id=r.rows[0].id;
+              resp.name=r.rows[0].name;
+              resp.content=r.rows[0].content;
+              resp.pass=r.rows[0].pass;
+              resp.pass_user_id=r.rows[0].pass_user_id;
+              resp.pass_dts=r.rows[0].pass_dts;
+              resp.do_not_use_partial=data.inrender;
+              resp.inrender=data.inrender;
+              console.log(resp);
+              res.type('application/json');
+              res.send(resp);
+              //res.render('checklists/onecheck',resp);
+  
+          }
+  
+      })
+
+};
+
+exports.delCheck = function(req, res) {
+    const data = {
+        cookie: req.cookies.session,
+        dcc_id: req.body.dcc_id,
+        inrender: req.body.inrender ||false
+    };
+    let resp = {
+        do_not_use_partial:data.inrender,
+        inrender:data.inrender,
+        dcc_id: data.dcc_id,
+        
+      };
+      console.log(data);
+      pool.query('UPDATE "data_checklist_content" SET state=1 WHERE "id" = $1 returning id', [data.dcc_id], (err, r) => {
+          if (err) {
+              console.log('SQL error');
+              console.error('Error executing query', err.stack);
+              console.log('error geting delCheck 1');
+          }
+          else {
+            console.log('delCheck');
+              console.log(r.rows);
+              resp.dcc_id=r.rows[0].id;
+              resp.do_not_use_partial=data.inrender;
+              resp.inrender=data.inrender;
+
+              console.log(resp);
+              res.type('application/json');
+              res.send(resp);
+  
+          }
+  
+      })
+
+};
+
 
 exports.setOneCheck = function(req, res) {
     const data = {

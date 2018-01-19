@@ -29,7 +29,7 @@ dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
      </thead>
      <tbody>
        {{#each checks}}
-           <tr id="tr{{this.dcc_id}}">
+           <tr id="{{this.dcc_id}}">
              <td>{{this.dcc_name}}</td>
              <td>{{this.dcc_content}}</td>
              <td id="pass{{this.dcc_id}}">{{this.dcc_pass}}</td>
@@ -38,13 +38,22 @@ dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
              <td>
                <div class="btn-group">
 
-                 <a href=# onclick='setcheck("{{this.dcc_id}}",true)' class="btn btn-primary">
+                 <a href=# onclick='setcheck("{{this.dcc_id}}",true)' class="btn btn-success">
                  Check OK
                  </a>
-                 <a href=# onclick='setcheck("{{this.dcc_id}}",false)' class="btn btn-primary">
+                 <a href=# onclick='setcheck("{{this.dcc_id}}",false)' class="btn btn-warning">
                  Check Fail
                  </a>
+                 <a href=# class="btn btn-default">
+                 &nbsp;
+                 </a>
+                 
+                   <a href=# onclick='delcheck("{{this.dcc_id}}",false)' class="btn btn-danger">
+                 Del
+                 </a>
                </div>
+               
+             
              </td>
            </tr>
 

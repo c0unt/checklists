@@ -27,12 +27,60 @@
       <a href="/checklists/cloneChecklist?id={{checklist_id}}" class="btn btn-primary">
       Clone...
       </a>
+       <button type="button" class="btn btn-primary"  onclick="showaddcheckblock()"> Add check</button>
     </div>
 
 
   </form>
 
+
+  <div id="addcheckblock" style="display:none">
+     <div id="addmessage">
+    </div>    
+     <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-question-sign"></i></span>
+      <input id="newcheck_name" type="text" class="form-control" name="newcheck_name" placeholder="new check" >
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-question-sign"></i></span>
+      <input id="newcheck_descr" type="text" class="form-control" name="panewcheck_descrss" placeholder="description" >
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="addcheck()">Add</button>
+   </div> 
+
   <script>
+
+function addcheck() {
+        var u = document.getElementById("id").value;
+        var new_name = document.getElementById("newcheck_name").value;
+        var new_descr = document.getElementById("newcheck_descr").value;
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          //document.getElementById("addmessage").innerHTML = this.responseText;
+          loadChecklistChecks();
+          }else{
+            if (this.status !==200 && this.status !==0 ) {
+            document.getElementById("addmessage").innerHTML='err:'+this.status;
+            }
+          }
+        }
+        xhttp.open("POST", "../Checklists/addCheck", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("id="+u+"&inrender=true&newcheck_name="+new_name+"&newcheck_descr="+new_descr);
+        
+
+        };
+
+    function showaddcheckblock() {
+    var x = document.getElementById("addcheckblock");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
       function loadChecklistChecks() {
           var xmlhttp;
           if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -72,6 +120,20 @@
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("dcc_id="+dcc_id+"&inrender=true&dcc_pass="+check);
       }
+      function delcheck(dcc_id,check) {
+        var xhttp; 
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+          document.getElementById(dcc_id).innerHTML = '';
+          
+          }
+        };
+        xhttp.open("POST", "../checklists/delCheck", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("dcc_id="+dcc_id+"&inrender=true");
+      };
   </script>
 
   <script type="text/javascript">

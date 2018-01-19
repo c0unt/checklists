@@ -43,6 +43,9 @@ module.exports = function(app) {
   app.get('/checklists/getChecklistChecks',Checklists.getChecklistChecks);
   app.post('/checklists/getChecklistChecks',Checklists.getChecklistChecks);
   app.post('/checklists/setOneCheck',Checklists.setOneCheck);
+  app.post('/checklists/addCheck',Checklists.addCheck);
+  app.post('/checklists/delCheck',Checklists.delCheck);
+  
 
 
 
