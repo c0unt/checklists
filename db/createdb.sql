@@ -62,7 +62,7 @@ SET search_path = public, pg_catalog;
 -- Name: getsessionobject(uuid); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION getsessionobject(session_id uuid, OUT object_id uuid) RETURNS uuid
+CREATE or replace FUNCTION  getsessionobject(session_id uuid, OUT object_id uuid) RETURNS uuid
     LANGUAGE sql
     AS $_$
  
@@ -73,7 +73,7 @@ CREATE FUNCTION getsessionobject(session_id uuid, OUT object_id uuid) RETURNS uu
 $_$;
 
 
-ALTER FUNCTION public.getsessionobject(session_id uuid, OUT object_id uuid) OWNER TO postgres;
+create or replace FUNCTION public.getsessionobject(session_id uuid, OUT object_id uuid) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -83,7 +83,7 @@ SET default_with_oids = false;
 -- Name: data_checklist_content; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE data_checklist_content (
+CREATE TABLE  IF NOT EXISTS  data_checklist_content (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     checklist_id uuid NOT NULL,
     check_order integer,
@@ -105,7 +105,7 @@ ALTER TABLE data_checklist_content OWNER TO postgres;
 -- Name: data_checklists; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE data_checklists (
+CREATE TABLE  IF NOT EXISTS   data_checklists (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text,
     version text,
@@ -117,13 +117,13 @@ CREATE TABLE data_checklists (
 );
 
 
-ALTER TABLE data_checklists OWNER TO postgres;
+ALTER TABLE  IF NOT EXISTS  data_checklists OWNER TO postgres;
 
 --
 -- Name: data_log; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE data_log (
+CREATE TABLE  IF NOT EXISTS  data_log (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     dts timestamp with time zone DEFAULT now(),
     action text,
@@ -139,7 +139,7 @@ ALTER TABLE data_log OWNER TO postgres;
 -- Name: ref_rpt_dataset_params; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_rpt_dataset_params (
+CREATE TABLE  IF NOT EXISTS ref_rpt_dataset_params (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text,
     query text,
@@ -159,7 +159,7 @@ ALTER TABLE ref_rpt_dataset_params OWNER TO postgres;
 -- Name: ref_rpt_datasets; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_rpt_datasets (
+CREATE TABLE  IF NOT EXISTS ref_rpt_datasets (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text,
     query text,
@@ -176,7 +176,7 @@ ALTER TABLE ref_rpt_datasets OWNER TO postgres;
 -- Name: ref_rpt_report_datasets; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_rpt_report_datasets (
+CREATE TABLE  IF NOT EXISTS ref_rpt_report_datasets (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     report_id uuid,
     dataset_id uuid,
@@ -192,7 +192,7 @@ ALTER TABLE ref_rpt_report_datasets OWNER TO postgres;
 -- Name: ref_rpt_reports; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_rpt_reports (
+CREATE TABLE  IF NOT EXISTS ref_rpt_reports (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text,
     right_id uuid,
@@ -208,7 +208,7 @@ ALTER TABLE ref_rpt_reports OWNER TO postgres;
 -- Name: ref_rpt_views; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_rpt_views (
+CREATE TABLE  IF NOT EXISTS ref_rpt_views (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text,
     path text,
@@ -228,7 +228,7 @@ ALTER TABLE ref_rpt_views OWNER TO postgres;
 -- Name: ref_sys_applications; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_applications (
+CREATE TABLE  IF NOT EXISTS ref_sys_applications (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     dts timestamp with time zone DEFAULT now(),
     name text NOT NULL,
@@ -245,7 +245,7 @@ ALTER TABLE ref_sys_applications OWNER TO postgres;
 -- Name: ref_sys_menuitems; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_menuitems (
+CREATE TABLE  IF NOT EXISTS ref_sys_menuitems (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text NOT NULL,
     state integer DEFAULT 0 NOT NULL,
@@ -262,7 +262,7 @@ ALTER TABLE ref_sys_menuitems OWNER TO postgres;
 -- Name: ref_sys_rights; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_rights (
+CREATE TABLE  IF NOT EXISTS ref_sys_rights (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text NOT NULL,
     tag text,
@@ -276,7 +276,7 @@ ALTER TABLE ref_sys_rights OWNER TO postgres;
 -- Name: ref_sys_states; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_states (
+CREATE TABLE  IF NOT EXISTS ref_sys_states (
     id integer NOT NULL,
     name text NOT NULL
 );
@@ -288,7 +288,7 @@ ALTER TABLE ref_sys_states OWNER TO postgres;
 -- Name: ref_sys_users; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_users (
+CREATE TABLE  IF NOT EXISTS ref_sys_users (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name text NOT NULL,
     pass text,
@@ -304,7 +304,7 @@ ALTER TABLE ref_sys_users OWNER TO postgres;
 -- Name: ref_sys_users_x_rights; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE ref_sys_users_x_rights (
+CREATE TABLE  IF NOT EXISTS ref_sys_users_x_rights (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     right_id uuid NOT NULL,
@@ -319,7 +319,7 @@ ALTER TABLE ref_sys_users_x_rights OWNER TO postgres;
 -- Name: tmp_sys_sessions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE tmp_sys_sessions (
+CREATE TABLE  IF NOT EXISTS tmp_sys_sessions (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     dts timestamp with time zone DEFAULT (now() + '01:00:00'::interval)
