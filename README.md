@@ -15,6 +15,13 @@ Simple checklist application for QA/testing purposes
 
 
 ## TODO
+
+* Installation
+- [ ] add database create or update feature on application startup
+- [ ] move settings to json file 
+- [ ] add a seting to undersrand whether it’s a new installation or not (for proper upgrade)
+- [ ] if a new installation - run setup dialog
+
 * Reporting
 - [ ] only one dataset per report is available now, while database structure allows to attach several datasets to one report. Reports/index.js getViewSingleDS should be replaced by getView when getView is fixed.
 - [ ] the report template name shall be taken from 'maket' property of the view.
