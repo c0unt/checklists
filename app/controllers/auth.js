@@ -67,17 +67,17 @@
       if (err) {
         console.log('SQL error');
         //return 
-        console.error('Error executing query', err.stack);
+        //console.error('Error executing query', err.stack);
         //res.render('login');
        // res.redirect('../login');
         res.status(403).send('');
         //console.log('login rendered 1');
       } else {
         if (result.rowCount === 1) {
-          console.log('checksession session Ok');
+          //console.log('checksession session Ok');
           next();
         } else {
-          console.log('checksession session FAIL!!!');
+          //console.log('checksession session FAIL!!!');
           //res.render('login');
           if (data.inrender){
           //res.render('',data);
@@ -85,7 +85,7 @@
           } else {
           res.redirect('../login');
           }
-          console.log('login rendered 2');
+          //console.log('login rendered 2');
 
         }
 
@@ -111,32 +111,32 @@
 
     if (req.method === 'GET') {
       res.render('login');
-      console.log('login rendered 1');
+      //console.log('login rendered 1');
 
     } else {
 
       pool.query('SELECT id FROM ref_sys_users WHERE state=0 and (email=$1 or name=$1)  and pass=$2', [data.name, data.pass], (err, result) => {
         if (err) {
           resp.message =  err.stack;
-          console.log('SQL error');
-          console.error('Error executing query', err.stack);
+          //console.log('SQL error');
+          //console.error('Error executing query', err.stack);
           res.render('login',resp);
-          console.log('login rendered 2');
+          //console.log('login rendered 2');
         } else {
-          console.log(result.rowCount);
+          //console.log(result.rowCount);
           if (result.rowCount === 1) {
             pool.query('Insert into tmp_sys_sessions (user_id) values ($1) returning id as session, dts as untill', [result.rows[0].id], (err, result) => {
               if (err) {
-                console.log('SQL session error');
-                console.error('Error executing query', err.stack);
+                //console.log('SQL session error');
+                //console.error('Error executing query', err.stack);
                 //error creating session
                 res.render('login');
-                console.log('login rendered 3');
+                //console.log('login rendered 3');
               } else {
                 res.cookie('session', result.rows[0].session);
-                console.log(req.originalUrl); // '/admin/new'
-                console.log(req.baseUrl); // '/admin'
-                console.log(req.path); // '/new'
+                //console.log(req.originalUrl); // '/admin/new'
+                //console.log(req.baseUrl); // '/admin'
+                //console.log(req.path); // '/new'
                 //   res.render('dashboard'); //по идее надо сделать редирект, и он уже будет с кукой
                 res.redirect('../../home')
               }
@@ -144,7 +144,7 @@
           } else {
             //user not found
             res.render('login');
-            console.log('login rendered 4');
+            //console.log('login rendered 4');
           }
         };
       });
@@ -190,7 +190,7 @@
           for (var i = 0, len = result.rowCount; i < len; i++) {
             let rr={
             child:[]
-            }
+            };
             rr.id=result.rows[i].id;
             rr.icon=result.rows[i].icon;
             rr.name=result.rows[i].name;
@@ -198,44 +198,24 @@
             rr.isparent=result.rows[i].isparent;
             
             resp.items.push(rr);
-            console.log(result.rows[i].name);
-            pool.query('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1',[result.rows[i].id, i],(err,r) =>{
-              if (err) {
-                console.log('!!<ERR>!!');
-                console.log(err);
-                
+            //console.log(result.rows[i].name);
+            pool.query('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1',[result.rows[i].id, i],(er,r) =>{
+              if (er) {
+                console.log(er);
               }else{
-                console.log('!!!!!!!!!!');
-                console.log(r.rows);
-                
                 if (r.rowCount===0){
-                  //resp.items.push(rr);
-                //  console.log('>'+rr.id);
-                 // console.log('>'+resp.items[i]);
                 }else{
-                  
-                 // rr.child=r.rows;
-                 // resp.items[r.rows[0].i].child.push(r.rows);
                  resp.items[r.rows[0].i].child=r.rows;
-
                 }
                 if (len===i){
-                  console.log('@@@@@@@');
-                  console.log(JSON.stringify(resp));
                   res.render('menu_data',resp);
                 }
               }
              
             }
-          )
+          );
           }
-
-         // resp.items = result.rows
-         // console.log(resp);
-         // res.render('menu_data',resp);
-
         }
-
-      })
+      });
 
   };

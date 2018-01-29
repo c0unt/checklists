@@ -44,7 +44,7 @@ exports.index = function(req, res) {
     } else {
 
      
-      console.log(r.rows);
+      //console.log(r.rows);
       res.render('reports/reportslist', r.rows);
      
     }
@@ -67,14 +67,13 @@ exports.getFilter = function(req, res) {
   pool.query('select dsp.sys_name as p_sys_name ,dsp.name as p_name, dsp.kind as p_kind, dsp.default as p_default, dsp.dataset_id as dataset_id, v.report_id as report_id, v.id as view_id, v.name as v_name from ref_rpt_dataset_params dsp inner join ref_rpt_report_datasets rds on rds.dataset_id=dsp.dataset_id inner join ref_rpt_views v on rds.report_id=v.report_id where v.id=$1 and dsp.state=0 and rds.state=0 and v.state=0', [data.v_id], (err, r) => {
     if (err) {
       console.log('SQL error');
-      return console.error('Error executing query', err.stack);
-      // res.render('login');
+      console.error('Error executing query', err.stack);
       console.log('error geting reports');
     } else {
       //TODO - no reason to show params dialog if param list is emty - need to forward to getViewSingleDS or getView method
-      console.log(r.rows);
+      //console.log(r.rows);
       resp.params = r.rows
-      console.log(resp);
+      //console.log(resp);
       res.render('reports/reportparams', resp);
 
     }
