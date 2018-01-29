@@ -172,9 +172,14 @@
    
     });
 
-    pool.query(' SELECT m.name as name, m.path as path FROM ref_sys_menuitems m ' +
+    pool.query(' SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
+      ' m.id,  '+
+      ' m.icon, '+
+      ' m.name as name, m.path as path FROM ref_sys_menuitems m ' +
       ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 ' +
-      ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id where ss.id=$1 and m.application_id=$2', [data.cookie, config.applicationID], (err, result) => {
+      ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
+      ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
+      ' order by  m.sortorder ', [data.cookie, config.applicationID], (err, result) => {
         if (err) {
           console.log('SQL error');
           console.error('Error executing query', err.stack);
@@ -182,9 +187,52 @@
           console.log('login rendered 1');
           
         } else {
-          resp.items = result.rows
-          console.log(resp);
-          res.render('menu_data',resp);
+          for (var i = 0, len = result.rowCount; i < len; i++) {
+            let rr={
+            child:[]
+            }
+            rr.id=result.rows[i].id;
+            rr.icon=result.rows[i].icon;
+            rr.name=result.rows[i].name;
+            rr.path=result.rows[i].path;
+            rr.isparent=result.rows[i].isparent;
+            
+            resp.items.push(rr);
+            console.log(result.rows[i].name);
+            pool.query('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1',[result.rows[i].id, i],(err,r) =>{
+              if (err) {
+                console.log('!!<ERR>!!');
+                console.log(err);
+                
+              }else{
+                console.log('!!!!!!!!!!');
+                console.log(r.rows);
+                
+                if (r.rowCount===0){
+                  //resp.items.push(rr);
+                //  console.log('>'+rr.id);
+                 // console.log('>'+resp.items[i]);
+                }else{
+                  
+                 // rr.child=r.rows;
+                 // resp.items[r.rows[0].i].child.push(r.rows);
+                 resp.items[r.rows[0].i].child=r.rows;
+
+                }
+                if (len===i){
+                  console.log('@@@@@@@');
+                  console.log(JSON.stringify(resp));
+                  res.render('menu_data',resp);
+                }
+              }
+             
+            }
+          )
+          }
+
+         // resp.items = result.rows
+         // console.log(resp);
+         // res.render('menu_data',resp);
 
         }
 
