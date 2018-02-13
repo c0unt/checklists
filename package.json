@@ -7,13 +7,16 @@
   },
   "dependencies": {
     "async": "^2.6.0",
+    "bluebird": "^3.5.1",
     "express": "3.0.4",
     "express-favicon": "^2.0.0",
     "hbs": "*",
     "less": "^2.7.2",
     "less-middleware": "^2.2.1",
+    "nconf": "^0.10.0",
     "node-postgres-named": "^2.4.1",
     "pg": "^7.4.1",
+    "pg-promise": "^7.4.1",
     "utilities": "^1.0.5",
     "uuid-validate": "0.0.2"
   }

@@ -1,0 +1,16 @@
+{
+  "app_title": "CheckList",
+  "app_version": "1.0.0.0",
+  "pg": {
+    "database": "checklists_",
+    "user": "postgres",
+    "password": "123",
+    "schema": "public",
+    "host": "localhost",
+    "port": "5432",
+    "pool": "20"
+  },
+  "server": {
+    "port": 3003
+  }
+}
