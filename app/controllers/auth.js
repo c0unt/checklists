@@ -155,9 +155,13 @@
     /*
     Perform session check and return menu items
     */
-    const data = {
-      cookie: req.cookies.session
-    };
+  const data = {
+    cookie: req.cookies.session
+  };
+  
+  if (validate(data.cookie) !== true) {
+    data.cookie = '00000000-0000-0000-0000-000000000000';
+  };
 
   var Sync = require("sync");
   var getChilds = function (qquery, array, is_first,callback)
@@ -167,6 +171,8 @@
             Sync(() => {
             if (error)
             {
+              console.log('SQL error');
+              res.status(403).send('');
                 console.log(error);
             }
             else
@@ -201,7 +207,7 @@
 
   Sync(function()
   {
-    var data = getChilds.sync(null, 'SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
+    var dat = getChilds.sync(null, 'SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
     ' m.id,  '+
     ' m.icon, '+
     ' m.name as name, m.path as path FROM ref_sys_menuitems m ' +
@@ -209,7 +215,7 @@
     ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
     ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
     ' order by m.sortorder ',
-    ["85c228a2-db5b-402d-a924-853570129af4", "6eb63ba3-5c35-494d-af56-aa1526aa0964"], true);
-    res.send(data);
+    [data.cookie, config.applicationID], true);
+    res.send(dat);
   });
   };
