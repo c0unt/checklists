@@ -11,7 +11,10 @@ var app = express();
 
 
 // Configure config
-var config = require('./config/config');
+var fs = require('fs');
+var cnfg = fs.readFileSync('./config/config.json');
+var config = JSON.parse(cnfg);
+//var config = require('./config/config'); //old
 
 
     app.set('port', config.port);
