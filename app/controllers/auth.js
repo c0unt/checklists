@@ -159,63 +159,57 @@
       cookie: req.cookies.session
     };
 
-    let resp = {
-      do_not_use_partial:true,
-      items:[]
-    };
-
-    if (validate(data.cookie) !== true) {
-      data.cookie = '00000000-0000-0000-0000-000000000000';
-    };
-
-    pool.query('delete  from tmp_sys_sessions where dts < now()', [], (err, result) => {
-   
-    });
-
-    pool.query(' SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
-      ' m.id,  '+
-      ' m.icon, '+
-      ' m.name as name, m.path as path FROM ref_sys_menuitems m ' +
-      ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 ' +
-      ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
-      ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
-      ' order by  m.sortorder ', [data.cookie, config.applicationID], (err, result) => {
-        if (err) {
-          console.log('SQL error');
-          console.error('Error executing query', err.stack);
-          res.render('login');
-          console.log('login rendered 1');
-          
-        } else {
-          for (var i = 0, len = result.rowCount; i < len; i++) {
-            let rr={
-            child:[]
-            };
-            rr.id=result.rows[i].id;
-            rr.icon=result.rows[i].icon;
-            rr.name=result.rows[i].name;
-            rr.path=result.rows[i].path;
-            rr.isparent=result.rows[i].isparent;
-            
-            resp.items.push(rr);
-            //console.log(result.rows[i].name);
-            pool.query('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1',[result.rows[i].id, i],(er,r) =>{
-              if (er) {
-                console.log(er);
-              }else{
-                if (r.rowCount===0){
-                }else{
-                 resp.items[r.rows[0].i].child=r.rows;
-                }
-                if (len===i){
-                  res.render('menu_data',resp);
-                }
-              }
-             
+  var Sync = require("sync");
+  var getChilds = function (qquery, array, is_first,callback)
+    {
+        pool.query(qquery, array, function(error, result)
+        {
+            Sync(() => {
+            if (error)
+            {
+                console.log(error);
             }
-          );
-          }
-        }
-      });
+            else
+            {
+                let lines = "";
+                for (var i = 0; i < result.rowCount; i++)
+                {
+                    let html_line = "";
+                    if (result.rows[i].isparent != 0)
+                    {
+                        let htmlline = getChilds.sync(null, "SELECT (select count(id) from ref_sys_menuitems where m.id = parent) AS isparent," + 
+                        "m.id, m.icon, m.name, m.path from ref_sys_menuitems m where m.parent = $1 order by m.sortorder",
+                        [result.rows[i].id], false);
+                        html_line = `<li class="${(is_first) ? 'first' : 'dropdown-submenu'}">
+                        <a class="list ${result.rows[i].icon}" data-toggle="dropdown" href="#">&nbsp;${result.rows[i].name}<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            ${htmlline}
+                        </ul>
+                        </li>\n`;
+                    }
+                    else
+                    {
+                      html_line = `<li><a class=${result.rows[i].icon} href=${result.rows[i].path}>&nbsp;${result.rows[i].name}</a></li>\n`;
+                    }
+                    lines += html_line;
+                }
+                callback(null, lines);
+            }
+            })
+        });
+    }
 
+  Sync(function()
+  {
+    var data = getChilds.sync(null, 'SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
+    ' m.id,  '+
+    ' m.icon, '+
+    ' m.name as name, m.path as path FROM ref_sys_menuitems m ' +
+    ' inner join ref_sys_users_x_rights r on r.right_id=m.right_id and r.state=0 ' +
+    ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
+    ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
+    ' order by m.sortorder ',
+    ["85c228a2-db5b-402d-a924-853570129af4", "6eb63ba3-5c35-494d-af56-aa1526aa0964"], true);
+    res.send(data);
+  });
   };
