@@ -164,44 +164,45 @@
   };
 
   var Sync = require("sync");
-  var getChilds = function (qquery, array, is_first,callback)
+  var getChilds = function (qquery, array, callback)
     {
-        pool.query(qquery, array, function(error, result)
+      pool.query(qquery, array, function(error, result)
+      {
+        Sync(() => {
+        if (error)
         {
-            Sync(() => {
-            if (error)
+          console.log('SQL error');
+          res.status(403).send('');
+            console.log(error);
+        }
+        else
+        {
+          let lines = "";
+          for (var i = 0; i < result.rowCount; i++)
+          {
+            let html_line = "";
+            if (result.rows[i].isparent != 0)
             {
-              console.log('SQL error');
-              res.status(403).send('');
-                console.log(error);
+              let htmlline = getChilds.sync(null, "SELECT (select count(id) from ref_sys_menuitems where m.id = parent) AS isparent," + 
+              "m.id, m.icon, m.name, m.path from ref_sys_menuitems m where m.parent = $1 order by m.sortorder",
+              [result.rows[i].id]);
+              html_line = `<li>
+                <a href="#" class="dropdown-toggle ${result.rows[i].icon}" data-toggle="dropdown">&nbsp;${result.rows[i].name}<b
+                class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    ${htmlline}
+                  </ul>
+                </li>\n`;
+              }
+              else
+              {
+                html_line = `<li><a class=${result.rows[i].icon} href=${result.rows[i].path}>&nbsp;${result.rows[i].name}</a></li>\n`;
+              }
+              lines += html_line;
             }
-            else
-            {
-                let lines = "";
-                for (var i = 0; i < result.rowCount; i++)
-                {
-                    let html_line = "";
-                    if (result.rows[i].isparent != 0)
-                    {
-                        let htmlline = getChilds.sync(null, "SELECT (select count(id) from ref_sys_menuitems where m.id = parent) AS isparent," + 
-                        "m.id, m.icon, m.name, m.path from ref_sys_menuitems m where m.parent = $1 order by m.sortorder",
-                        [result.rows[i].id], false);
-                        html_line = `<li class="${(is_first) ? 'first' : 'dropdown-submenu'}">
-                        <a class="list ${result.rows[i].icon}" data-toggle="dropdown" href="#">&nbsp;${result.rows[i].name}<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            ${htmlline}
-                        </ul>
-                        </li>\n`;
-                    }
-                    else
-                    {
-                      html_line = `<li><a class=${result.rows[i].icon} href=${result.rows[i].path}>&nbsp;${result.rows[i].name}</a></li>\n`;
-                    }
-                    lines += html_line;
-                }
-                callback(null, lines);
-            }
-            })
+            callback(null, lines);
+          }
+          })
         });
     }
 
@@ -215,7 +216,7 @@
     ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
     ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
     ' order by m.sortorder ',
-    [data.cookie, config.applicationID], true);
+    [data.cookie, config.applicationID]);
     res.send(dat);
   });
   };
