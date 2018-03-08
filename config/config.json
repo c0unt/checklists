@@ -1,1 +1,10 @@
-{"applicationID":"6eb63ba3-5c35-494d-af56-aa1526aa0964","port":3003,"pgport":5432,"pghost":"127.0.0.1","pguser":"postgres","pgpass":"password","pgdb":"checklists","dateformat":"'DD.MM.YYYY '"}
+{
+    "applicationID":"6eb63ba3-5c35-494d-af56-aa1526aa0964",
+    "port":3003,
+    "pgport":54010,
+    "pghost":"127.0.0.1",
+    "pguser":"postgres",
+    "pgpass":"postgres",
+    "pgdb":"checklists",
+    "dateformat":"'DD.MM.YYYY '"
+}
