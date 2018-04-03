@@ -2,10 +2,10 @@
 
 module.exports = function(app) {
 
-  var index = require('../app/controllers/index');
+  let index = require('../app/controllers/index');
   app.get('/', index.index);
 
-  var auth = require('../app/controllers/auth');
+  let auth = require('../app/controllers/auth');
   app.post('*login', auth.login);
   app.get('*login', auth.login);
 
@@ -18,13 +18,10 @@ module.exports = function(app) {
   app.get('/auth/test', auth.test);
   app.get('*logout', auth.logout);
 
-
-
-  var home = require('../app/controllers/home');
+  let home = require('../app/controllers/home');
   app.get('/home', home.index);
 
-
-  var Users = require('../app/controllers/users/index');
+  let Users = require('../app/controllers/users/index');
   app.get('/users', Users.index);
   app.get('/users/addUser', Users.addUser);
   app.post('/users/addUser', Users.addUser);
@@ -33,8 +30,7 @@ module.exports = function(app) {
   app.post('/users/setUserRight',Users.setUserRight);
   app.post('/users/setUserPass',Users.setUserPass);
 
-
-  var Checklists = require('../app/controllers/checklists/index');
+  let Checklists = require('../app/controllers/checklists/index');
   app.get('/checklists', Checklists.index);
   app.get('/checklists/addChecklist', Checklists.addChecklist);
   app.post('/checklists/addChecklist', Checklists.addChecklist);
@@ -47,17 +43,11 @@ module.exports = function(app) {
   app.post('/checklists/delCheck',Checklists.delCheck);
   
 
-
-
-
-  var Reports = require('../app/controllers/reports/index');
+  let Reports = require('../app/controllers/reports/index');
   app.get('/reports', Reports.index);
   app.get('/reports/getFilter', Reports.getFilter);
   app.post('/reports/getView', Reports.getViewSingleDS);
   //app.post('/reports/getView',Reports.getView);
   app.get('/reports/report1', Reports.report1);
  
-
-
-
-}
+};

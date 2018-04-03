@@ -5,7 +5,7 @@ const config = require('../config_/index');
 
 // грузим все "repo" по отдельности, потому что событие 'extend' вызывается многократно
 let repos = {
-    repDServ: require('./repos/repSystem') 
+    repSystem: require('./repos/repSystem') 
 };
 
 // pg-promise initialization options:
@@ -16,11 +16,7 @@ let options = {
 
     // Extending the database protocol with our custom repositories:
     extend: obj => {
-        obj.DServ = repos.repDServ(obj, pgp);
-        obj.PAServ = repos.repPAServ(obj, pgp);
-        obj.User = repos.repUser(obj, pgp);
-        obj.Customer = repos.repCustomer(obj, pgp);
-        obj.DTModule = repos.repDTModule(obj, pgp);
+        obj.System = repos.repSystem(obj, pgp);
     }
 };
 

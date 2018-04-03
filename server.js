@@ -6,7 +6,7 @@ const app = express();
 const hbs = require('hbs');
 
 // Configure config
-const config = require('./config/');
+const config = require('./config_');
 const log = require('./log')(module);
 
 const db_ = require('./db_').db;
