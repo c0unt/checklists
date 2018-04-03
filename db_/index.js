@@ -5,11 +5,7 @@ const config = require('../config');
 
 // грузим все "repo" по отдельности, потому что событие 'extend' вызывается многократно
 let repos = {
-    repDServ: require('./repos/repDServ'),
-    repPAServ: require('./repos/repPAServ'),
-    repUser: require('./repos/repUser'),
-    repCustomer: require('./repos/repCustomer'),
-    repDTModule: require('./repos/repDTModule')
+    repDServ: require('./repos/repSystem') 
 };
 
 // pg-promise initialization options:
