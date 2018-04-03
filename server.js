@@ -4,6 +4,7 @@ const express = require('express');
 const http = require('http');
 const app = express();
 const hbs = require('hbs');
+
 // Configure config
 const config = require('./config/');
 const log = require('./log')(module);
@@ -43,6 +44,7 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(app.router);
 app.use(require('less-middleware')('/public'));
+
 //app.use(express.static('/public'));
 app.use('/public', express.static('public'));
 
