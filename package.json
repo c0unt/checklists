@@ -6,10 +6,11 @@
     "start": "node app"
   },
   "dependencies": {
-    "async": "^2.6.0",
     "bluebird": "^3.5.1",
-    "express": "3.0.4",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.0.0",
     "express-favicon": "^2.0.0",
+    "express-session": "^1.15.6",
     "hbs": "*",
     "less": "^2.7.2",
     "less-middleware": "^2.2.1",

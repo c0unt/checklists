@@ -5,7 +5,7 @@ const config = require('../config_/index');
 
 // грузим все "repo" по отдельности, потому что событие 'extend' вызывается многократно
 let repos = {
-    repSystem: require('./repos/repSystem') 
+    repSystemDB: require('./repos/repSystemDB')
 };
 
 // pg-promise initialization options:
@@ -16,7 +16,7 @@ let options = {
 
     // Extending the database protocol with our custom repositories:
     extend: obj => {
-        obj.System = repos.repSystem(obj, pgp);
+        obj.systemDB = repos.repSystemDB(obj, pgp);
     }
 };
 
@@ -26,7 +26,8 @@ let DBconfig = {
     port: config.get('pg:port'),
     database: config.get('pg:database'),
     user: config.get('pg:user'),
-    password: config.get('pg:password')
+    password: config.get('pg:password'),
+    client_encoding: config.get('pg:encoding')
 };
 
 // Load and initialize pg-promise:

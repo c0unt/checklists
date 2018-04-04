@@ -1,7 +1,7 @@
 /*
  Description: Repors module
  */
-const async = require("async");
+
 const db = require('../../../db_').db;
 const log = require('../../../log')(module);
 

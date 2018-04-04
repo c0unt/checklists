@@ -251,6 +251,7 @@ CREATE TABLE  IF NOT EXISTS ref_sys_menuitems (
     path text,
     icon text,
     right_id uuid,
+    parent uuid,
     application_id uuid
 );
 

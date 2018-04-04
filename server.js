@@ -1,55 +1,72 @@
 // Main app file that links everything together and runs the app
 
 const express = require('express');
-const http = require('http');
 const app = express();
+const path = require('path');
 const hbs = require('hbs');
+const session = require('express-session');
 
-// Configure config
-const config = require('./config_');
+const BodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 const log = require('./log')(module);
-
 const db_ = require('./db_').db;
+const config = require('./config_');
 
-app.set('port', config.get('server:port'));
-app.set('views', __dirname + '/app/views');
-app.set('view engine', 'hbs');
+log.info('Try to db init... ');
 
-hbs.registerPartials(__dirname + '/app/views/partials');
+db_.systemDB.init()
+    .then(() => {
+    
+        log.info(' db init done ');
+       
+        let secretKey = config.get('server:secretKey');
+        let startPort = config.get('server:port');
 
-hbs.registerHelper('cond', function (expression, options) {
-    let fn = function () {
-    }, result;
-    try {
-        fn = Function.apply(this, ['return ' + expression + ' ;']);
-    } catch (e) {
-        log.error(e);
-    }
-    try {
-        result = fn.bind(this)();
-    } catch (e) {
-        log.error(e);
-    }
+        hbs.registerPartials(__dirname + '/app/views/partials');
 
-    return result ? options.fn(this) : options.inverse(this);
+        hbs.registerHelper('cond', function (expression, options) {
+            let fn = function () {
+            }, result;
+            try {
+                fn = Function.apply(this, ['return ' + expression + ' ;']);
+            } catch (e) {
+                log.error(e);
+            }
+            try {
+                result = fn.bind(this)();
+            } catch (e) {
+                log.error(e);
+            }
+
+            return result ? options.fn(this) : options.inverse(this);
+        });
+
+        log.info('Start: init express ...');
+
+        log.info('Set the view engine...');
+        app.set('view engine', 'hbs');
+
+        log.info('Configure views path...');
+
+        app.set('views', path.join(__dirname, '/app/views'));
+
+
+        app.use(cookieParser(secretKey));
+        app.use(BodyParser.json({limit: '50mb'}));
+        app.use(BodyParser.urlencoded({limit: '50mb', extended: true}));
+        app.use(express.static('public'));
+
+        require('./routes/index')(app);
+
+        log.info('try to start app ...');
+        return app.listen(startPort, function () {
+            log.info("Live at Port " + startPort);
+        });
+
+    }).catch((error) => {
+        return log.error('init db error:  ' + error);
 });
 
-const favicon = require('express-favicon');
-app.use(favicon(__dirname + '/public/favicon.png'));
 
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
-app.use(express.session());
-app.use(app.router);
-app.use(require('less-middleware')('/public'));
 
-//app.use(express.static('/public'));
-app.use('/public', express.static('public'));
-
-require('./config/routes')(app);
-
-app.listen(config.get('server:port'), function () {
-    log.info("Live at Port " + config.get('server:port'));
-});

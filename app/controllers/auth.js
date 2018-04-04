@@ -5,6 +5,7 @@
 const db = require('../../db_').db;
 const log = require('../../log')(module);
 const validate = require('uuid-validate');
+const config = require('../../config_');
 
 exports.logout = (req, res) => {
     /*
@@ -43,7 +44,7 @@ exports.checksession = function (req, res, next) {
     db.any('SELECT id,dts FROM tmp_sys_sessions WHERE id=$1 and dts>now()', [data.cookie]
     ).then((result) => {
 
-        if (result.rowCount === 1) {
+        if (result.length === 1) {
             //console.log('checksession session Ok');
             next();
             return null;
@@ -51,7 +52,6 @@ exports.checksession = function (req, res, next) {
 
         //checksession session FAIL!!!
         if (data.inrender) {
-            //res.render('',data);
             res.status(403).send('');
         } else
             res.redirect('../login');
@@ -75,7 +75,7 @@ exports.login = function (req, res) {
         pass: req.body.userPassword
     };
 
-    log.info(JSON.stringify(data));
+    log.info('login data' + JSON.stringify(data));
 
     let resp = {
         message: ''
@@ -87,12 +87,12 @@ exports.login = function (req, res) {
 
     db.any('SELECT id FROM ref_sys_users WHERE state=0 and (email=$1 or name=$1)  and pass=$2', [data.name, data.pass]
     ).then((result) => {
-        if (result.rowCount !== 1) throw new Error('ref_sys_users record count  error');
+        if (result.length !== 1) throw new Error('ref_sys_users record count  error');
 
-        return db.any('Insert into tmp_sys_sessions (user_id) values ($1) returning id as session, dts as untill', [result.rows[0].id]);
+        return db.any('Insert into tmp_sys_sessions (user_id) values ($1) returning id as session, dts as untill', [result[0].id]);
 
     }).then((result) => {
-        res.cookie('session', result.rows[0].session);
+        res.cookie('session', result[0].session);
         res.redirect('../../home')
 
     }).catch((err) => {
@@ -127,25 +127,25 @@ exports.getUserMenu = function (req, res) {
             ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 ' +
             ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id ' +
             ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
-            ' order by  m.sortorder ', [data.cookie, config.applicationID]);
+            ' order by  m.sortorder ', [data.cookie, config.get('applicationID')]);
     }).then((result) => {
-        for (var i = 0, len = result.rowCount; i < len; i++) {
+        for (var i = 0, len = result.length; i < len; i++) {
+
             let rr = {
                 child: []
             };
             
-            rr.id = result.rows[i].id;
-            rr.icon = result.rows[i].icon;
-            rr.name = result.rows[i].name;
-            rr.path = result.rows[i].path;
-            rr.isparent = result.rows[i].isparent;
+            rr.id = result[i].id;
+            rr.icon = result[i].icon;
+            rr.name = result[i].name;
+            rr.path = result[i].path;
+            rr.isparent = result[i].isparent;
 
             resp.items.push(rr);
             
             db.any('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1', [result.rows[i].id, i]
-            ).then((data) => {
-
-                if (r.rowCount !== 0) resp.items[r.rows[0].i].child = r.rows;
+            ).then((r) => {
+                if (r.length !== 0) resp.items[r[0].i].child = r;
                 if (len === i)   res.render('menu_data', resp);
                 return null;
             }).catch((err) => {

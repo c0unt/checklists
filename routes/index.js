@@ -1,6 +1,8 @@
 // Set up routes for the app
+const share = require('../share');
+const log = require('../log')(module);
 
-module.exports = function(app) {
+module.exports = (app) => {
 
   let index = require('../app/controllers/index');
   app.get('/', index.index);
@@ -49,5 +51,16 @@ module.exports = function(app) {
   app.post('/reports/getView', Reports.getViewSingleDS);
   //app.post('/reports/getView',Reports.getView);
   app.get('/reports/report1', Reports.report1);
- 
+
+  //default 404  error  handler
+   app.use('/', function (req, res, next) {
+        //share.sendErrorObj(res, 'method_not_allowed', 'check URL');
+       share.sendErrorObj(res, '404 error', 'page not found');
+   });
+
+   // default error handler
+   app.use( (err, req, res) => {
+        log.error('UNKNOWN ERROR IN '+ JSON.stringify(req.body));
+        share.sendErrorObj(res, 'unknown_error', err);
+    });
 };
