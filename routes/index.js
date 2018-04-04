@@ -53,7 +53,7 @@ module.exports = (app) => {
   app.get('/reports/report1', Reports.report1);
 
   //default 404  error  handler
-   app.use('/', function (req, res, next) {
+   app.use('/',  (req, res, next) => {
         //share.sendErrorObj(res, 'method_not_allowed', 'check URL');
        share.sendErrorObj(res, '404 error', 'page not found');
    });
