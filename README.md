@@ -17,8 +17,8 @@ Simple checklist application for QA/testing purposes
 ## TODO
 
 * Installation
-+ [ ] add database create or update feature on application startup
-+ [ ] move settings to json file 
+- [ ] add database create or update feature on application startup
+- [ ] move settings to json file 
 - [ ] add a seting to undersrand whether it’s a new installation or not (for proper upgrade)
 - [ ] if a new installation - run setup dialog
 
