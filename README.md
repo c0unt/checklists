@@ -10,15 +10,15 @@ Simple checklist application for QA/testing purposes
 
 * git clone
 * npm install
-* create database "checklists" with 'db/createdb.sql'
-* if you have non-defult postgresql credentials - fix it in 'config/config.js'
+* create empty database "checklists" and run app
+* if you have non-defult postgresql credentials - fix it in 'config_/config.json'
 
 
 ## TODO
 
 * Installation
-- [ ] add database create or update feature on application startup
-- [ ] move settings to json file 
++ [ ] add database create or update feature on application startup
++ [ ] move settings to json file 
 - [ ] add a seting to undersrand whether it’s a new installation or not (for proper upgrade)
 - [ ] if a new installation - run setup dialog
 
