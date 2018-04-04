@@ -10,8 +10,8 @@ const BodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const log = require('./log')(module);
-const db_ = require('./db_').db;
-const config = require('./config_');
+const db_ = require('./db').db;
+const config = require('./config');
 
 log.info('Try to db init... ');
 

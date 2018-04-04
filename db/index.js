@@ -1,7 +1,7 @@
 'use strict';
 
 const promise = require('bluebird');
-const config = require('../config_/index');
+const config = require('../config/index');
 
 // грузим все "repo" по отдельности, потому что событие 'extend' вызывается многократно
 let repos = {

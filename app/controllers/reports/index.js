@@ -2,7 +2,7 @@
  Description: Repors module
  */
 
-const db = require('../../../db_').db;
+const db = require('../../../db').db;
 const log = require('../../../log')(module);
 
 /*

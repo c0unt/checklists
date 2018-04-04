@@ -3,7 +3,7 @@
  //TODO Aware about security!
  */
 
-const db = require('../../db_').db;
+const db = require('../../db').db;
 const log = require('../../log')(module);
 
 exports.logAction = function (token, action, data) {

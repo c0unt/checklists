@@ -2,10 +2,10 @@
  Description: Auth module. Allows to login/logout.
  */
 
-const db = require('../../db_').db;
+const db = require('../../db').db;
 const log = require('../../log')(module);
 const validate = require('uuid-validate');
-const config = require('../../config_');
+const config = require('../../config');
 
 exports.logout = (req, res) => {
     /*

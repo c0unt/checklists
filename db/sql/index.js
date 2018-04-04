@@ -5,7 +5,7 @@
 
 const QueryFile = require('pg-promise').QueryFile;
 const path = require('path');
-const config = require('../../config_/index');
+const config = require('../../config/index');
 
 // Helper for linking to external query files;
 function sql(file) {

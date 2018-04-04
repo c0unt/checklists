@@ -2,7 +2,7 @@
  Description: Checlists core module
  */
 
-const db = require('../../../db_').db;
+const db = require('../../../db').db;
 const log = require('../../../log')(module);
 const uuidv4 = require('uuid/v4');
 
