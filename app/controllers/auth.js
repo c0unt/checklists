@@ -93,8 +93,7 @@ exports.login = (req, res) => {
 
     }).then((result) => {
         res.cookie('session', result[0].session);
-        res.redirect('../../home')
-
+        return  res.redirect('../../home')
     }).catch((err) => {
         resp.message = err.stack;
         return res.render('login', resp);
