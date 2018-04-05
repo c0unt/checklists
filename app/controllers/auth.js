@@ -86,7 +86,7 @@ exports.login = (req, res) => {
     }
 
     db.any('SELECT id FROM ref_sys_users WHERE state=0 and (email=$1 or name=$1)  and pass=$2', [data.name, data.pass]
-    ).then((result) => {
+    ).then(result => {
         if (result.length !== 1) throw new Error('ref_sys_users record count  error');
 
         return db.any('Insert into tmp_sys_sessions (user_id) values ($1) returning id as session, dts as untill', [result[0].id]);
@@ -127,7 +127,7 @@ exports.getUserMenu = (req, res) => {
             ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id ' +
             ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
             ' order by  m.sortorder ', [data.cookie, config.get('applicationID')]);
-    }).then((result) => {
+    }).then(result => {
 
         let sQueryParams = [];
 
@@ -167,7 +167,6 @@ exports.getUserMenu = (req, res) => {
             log.info('getUserMenu Done!');
             // и вернем ответ
             return res.render('menu_data', resp);
-
         }).catch(error => {
             return log.error(error);
         });

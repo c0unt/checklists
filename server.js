@@ -53,18 +53,16 @@ db.systemDB.init()
         app.set('view engine', 'hbs');
 
         log.info('Configure views path...');
-        app.use('/public', express.static(__dirname +'/public'));
+        app.use('/public', express.static(__dirname + '/public'));
         app.use('/ico/favicon.png', express.static(path.join(__dirname, 'public', 'img', 'favicon.png')));
         app.use(cookieParser(secretKey));
         app.use(BodyParser.json({limit: '50mb'}));
         app.use(BodyParser.urlencoded({limit: '50mb', extended: false}));
 
-
-        //app.use('/ico', favicon());
-
         require('./routes/index')(app);
 
         log.info('try to start app ...');
+
         return app.listen(startPort, function () {
             log.info("Live at Port " + startPort);
         });
