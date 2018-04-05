@@ -166,7 +166,7 @@ exports.getUserMenu = (req, res) => {
 
             log.info('getUserMenu Done!');
             // и вернем ответ
-            return res.render('menu_data', resp);
+            return   res.render('menu_data', resp);
         }).catch(error => {
             return log.error(error);
         });

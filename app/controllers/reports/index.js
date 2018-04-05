@@ -142,14 +142,14 @@ exports.getViewSingleDS = (req, res) => {
         ' from ref_rpt_datasets rds inner join ref_rpt_report_datasets rrds on rrds.dataset_id=rds.id ' +
         ' inner join ref_rpt_views vs on vs.report_id=rrds.report_id where  vs.id=$1', [data.v_id]
     ).then((r) => {
-        resp.view_name = r.rows[0].v_name;
+        resp.view_name = r[0].v_name;
         //  resp.datasets['ds0']=r.rows[0].rds_name;
-        resp.datasets.push(r.rows[0].v_name);
+        resp.datasets.push(r[0].v_name);
 
         //TODO  resp.datasets[0].name=r.rows[0].rds_name;
-        db.any(r.rows[0].rds_query, data.params
+        db.any(r[0].rds_query, data.params
         ).then((rr) => {
-            log.info(r.rows[0].rds_name);
+            log.info(r[0].rds_name);
             log.info('=BEGIN=DATA==================');
             log.info(JSON.stringify(rr.rows));
 
@@ -187,8 +187,8 @@ exports.report1 =  (req, res) => {
 
         let html = '<h2> Состояние очередей: </h2>';
         for (let i = 0; i < result.rowCount; i++) {
-            html = html + '<li class="list-group-item">' + result.rows[i].tag + '<span class="badge">'
-                + result.rows[i].count + '</span>';
+            html = html + '<li class="list-group-item">' + result[i].tag + '<span class="badge">'
+                + result[i].length + '</span>';
         }
         return res.send(html);
     }).catch((err) => {

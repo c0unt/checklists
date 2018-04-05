@@ -102,8 +102,8 @@ exports.getUser = (req, res) => {
 
     db.any('SELECT u.id as id, u.name as name, u.email as email,u.telegram as telegram, u.state as state FROM ref_sys_users u where u.id=$1', [data.id]
     ).then((r) => {
-        log.info(JSON.stringify(r.rows[0]));
-        return res.render('users/user', r.rows[0]);
+        log.info(JSON.stringify(r[0]));
+        return res.render('users/user', r[0]);
     }).catch((err) => {
         log.info('SQL error');
         log.error('Error executing query' + err.stack);
@@ -169,10 +169,10 @@ exports.setUserRight =  (req, res) => {
         log.info('setUserRight');
         log.info(JSON.stringify(r.rows));
 
-        resp.id = r.rows[0].id;
-        resp.user_id = r.rows[0].user_id;
-        resp.right_id = r.rows[0].right_id;
-        resp.state = r.rows[0].state;
+        resp.id = r[0].id;
+        resp.user_id = r[0].user_id;
+        resp.right_id = r[0].right_id;
+        resp.state = r[0].state;
         resp.do_not_use_partial = data.inrender;
         resp.inrender = data.inrender;
 

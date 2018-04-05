@@ -14,7 +14,7 @@ exports.index = (req, res) => {
         ' cl.status as checklist_status FROM data_checklists cl where cl.state=0 order by cl.name '
     ).then((data) => {
         log.info(data.rows);
-        return res.render('checklists/checklistslist', data.rows);
+        return res.render('checklists/checklistslist', data);
     }).catch((err) => {
         log.info('SQL error - error geting data_checklists 1');
         return log.error('Error executing query' + err.stack);
@@ -75,8 +75,8 @@ exports.getChecklist = (req, res) => {
     db.any('SELECT cl.id as checklist_id, cl.name as checklist_name, cl.version as checklist_version, cl.status as checklist_status FROM data_checklists cl where cl.id=$1', [data.id]
     ).then((r) => {
 
-        log.info(r.rows[0]);
-        return res.render('checklists/checklist', r.rows[0]);
+        log.info(r[0]);
+        return res.render('checklists/checklist', r[0]);
     }).catch((err) => {
         log.info('SQL error');
         log.error('Error executing query' + err.stack);
@@ -106,16 +106,14 @@ exports.getChecklistChecks = (req, res) => {
         ' dcc.pass_dts as dcc_pass_dts, u.name as user_name from data_checklist_content dcc ' +
         'left join ref_sys_users u on u.id=dcc.pass_user_id where dcc.checklist_id =$1 and dcc.state=0', [data.id]
     ).then((r) => {
-        log.info('getChecklistChecks');
-        log.info(r.rows);
-        resp.checks = r.rows;
+        log.info('getChecklistChecks ');
+        resp.checks = r;
         log.info(JSON.stringify(resp));
-//
         return res.render('checklists/checklistchecks', resp);
     }).catch((err) => {
-        log.info('SQL error');
+        log.info('SQL error  geting getChecklistChecks 1');
         log.error('Error executing query' + err.stack);
-        return log.info('error geting getChecklistChecks 1');
+        throw new Error('getChecklistChecks return error');
     });
 };
 
@@ -140,18 +138,18 @@ exports.addCheck = (req, res) => {
         log.info('addCheck');
         log.info(JSON.stringify(r.rows));
 
-        resp.id = r.rows[0].id;
-        resp.name = r.rows[0].name;
-        resp.content = r.rows[0].content;
-        resp.pass = r.rows[0].pass;
-        resp.pass_user_id = r.rows[0].pass_user_id;
-        resp.pass_dts = r.rows[0].pass_dts;
+        resp.id = r[0].id;
+        resp.name = r[0].name;
+        resp.content = r[0].content;
+        resp.pass = r[0].pass;
+        resp.pass_user_id = r[0].pass_user_id;
+        resp.pass_dts = r[0].pass_dts;
         resp.do_not_use_partial = data.inrender;
         resp.inrender = data.inrender;
 
         log.info(JSON.stringify(resp));
-        res.type('application/json');
 
+        res.type('application/json');
         return res.send(resp);
     }).catch((err) => {
         log.info('SQL error');
@@ -184,7 +182,7 @@ exports.delCheck = (req, res) => {
         log.info('delCheck');
         log.info(JOSN.stringify(r.rows));
 
-        resp.dcc_id = r.rows[0].id;
+        resp.dcc_id = r[0].id;
         resp.do_not_use_partial = data.inrender;
         resp.inrender = data.inrender;
 
@@ -224,10 +222,10 @@ exports.setOneCheck = (req, res) => {
         log.info('setOneCheck');
         log.info(JOSN.stringify(r.rows));
 
-        resp.id = r.rows[0].id;
-        resp.user_id = r.rows[0].pass_user_id;
-        resp.pass = r.rows[0].pass;
-        resp.pass_dts = r.rows[0].pass_dts;
+        resp.id = r[0].id;
+        resp.user_id = r[0].pass_user_id;
+        resp.pass = r[0].pass;
+        resp.pass_dts = r[0].pass_dts;
         resp.do_not_use_partial = data.inrender;
         resp.inrender = data.inrender;
 
