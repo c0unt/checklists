@@ -1,6 +1,7 @@
 /*
  Description: Auth module. Allows to login/logout.
  */
+"use strict";
 
 const db = require('../../db').db;
 const log = require('../../log')(module);
@@ -26,7 +27,7 @@ exports.test = (req, res) => {
 };
 
 
-exports.checksession = function (req, res, next) {
+exports.checksession = (req, res, next) => {
     /*
      Perform session check as middleware: if session is not ok - quits app to login dialog
      */
@@ -52,11 +53,10 @@ exports.checksession = function (req, res, next) {
 
         //checksession session FAIL!!!
         if (data.inrender) {
-            res.status(403).send('');
+            return res.status(403).send('');
         } else
-            res.redirect('../login');
+            return res.redirect('../login');
 
-        return null;
     }).catch((err) => {
         log.error('checksession SQL error');
         return res.status(403).send('');
@@ -65,7 +65,7 @@ exports.checksession = function (req, res, next) {
 };
 
 
-exports.login = function (req, res) {
+exports.login = (req, res) => {
     /*
      Perform log in
      */
@@ -102,7 +102,7 @@ exports.login = function (req, res) {
 
 };
 
-exports.getUserMenu = function (req, res) {
+exports.getUserMenu = (req, res) => {
     /*
      Perform session check and return menu items
      */
@@ -129,31 +129,49 @@ exports.getUserMenu = function (req, res) {
             ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
             ' order by  m.sortorder ', [data.cookie, config.get('applicationID')]);
     }).then((result) => {
-        for (var i = 0, len = result.length; i < len; i++) {
 
-            let rr = {
-                child: []
-            };
-            
-            rr.id = result[i].id;
-            rr.icon = result[i].icon;
-            rr.name = result[i].name;
-            rr.path = result[i].path;
-            rr.isparent = result[i].isparent;
+        let sQueryParams = [];
+
+        result.forEach((item, i) => {
+            let rr = {};
+
+            rr.id = item.id;
+            rr.icon = item.icon;
+            rr.name = item.name;
+            rr.path = item.path;
+            rr.isparent = item.isparent;
+            rr.child = [];
 
             resp.items.push(rr);
-            
-            db.any('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1', [result.rows[i].id, i]
-            ).then((r) => {
-                if (r.length !== 0) resp.items[r[0].i].child = r;
-                if (len === i)   res.render('menu_data', resp);
-                return null;
-            }).catch((err) => {
-                return log.error(err);
+
+            let queryParam = {'id': rr.id, 'indx': i};
+
+            sQueryParams.push(queryParam);
+        });
+
+        let selectSQL = 'select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1';
+
+        // закину сразу все запросы
+        db.tx(t => {
+            const queries = sQueryParams.map(q => {
+                return t.any(selectSQL, [q.id, q.indx]);
+            });
+            return t.batch(queries);
+
+        }).then(data => {
+            //когда все запросы отработали, обработаем ответы по очереди:
+            data.forEach((r) => {
+                if (r.length !== 0)
+                    resp.items[r[0].i].child = r;
             });
 
+            log.info('getUserMenu Done!');
+            // и вернем ответ
+            return res.render('menu_data', resp);
 
-        }
+        }).catch(error => {
+            return log.error(error);
+        });
 
         return null;
     }).catch((err) => {
