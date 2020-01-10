@@ -172,14 +172,14 @@
    
     });
 
-    pool.query(' SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, '+
-      ' m.id,  '+
-      ' m.icon, '+
-      ' m.name as name, m.path as path FROM ref_sys_menuitems m ' +
-      ' inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 ' +
-      ' inner join tmp_sys_sessions ss on r.user_id=ss.user_id '+
-      ' where m.parent is null and ss.id=$1 and m.application_id=$2' +
-      ' order by  m.sortorder ', [data.cookie, config.applicationID], (err, result) => {
+    pool.query(` SELECT (select count(id) as q from ref_sys_menuitems where parent=m.id)as isparent, 
+       m.id,  
+       m.icon, 
+       m.name as name, m.path as path FROM ref_sys_menuitems m 
+       inner join ref_sys_users_x_rights r  on r.right_id=m.right_id and r.state=0 
+       inner join tmp_sys_sessions ss on r.user_id=ss.user_id 
+       where m.parent is null and ss.id=$1 and m.application_id=$2
+       order by  m.sortorder `, [data.cookie, config.applicationID], (err, result) => {
         if (err) {
           console.log('SQL error');
           console.error('Error executing query', err.stack);
@@ -195,26 +195,13 @@
             rr.icon=result.rows[i].icon;
             rr.name=result.rows[i].name;
             rr.path=result.rows[i].path;
-            rr.isparent=result.rows[i].isparent;
+            rr.isparent='0';//result.rows[i].isparent;
             
             resp.items.push(rr);
             //console.log(result.rows[i].name);
-            pool.query('select $2 as i, icon, id, name, path from ref_sys_menuitems where parent=$1',[result.rows[i].id, i],(er,r) =>{
-              if (er) {
-                console.log(er);
-              }else{
-                if (r.rowCount===0){
-                }else{
-                 resp.items[r.rows[0].i].child=r.rows;
-                }
-                if (len===i){
-                  res.render('menu_data',resp);
-                }
-              }
-             
-            }
-          );
+            
           }
+          res.render('menu_data',resp);
         }
       });
 
