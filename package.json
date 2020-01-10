@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "async": "^2.6.0",
-    "express": "3.0.4",
+    "express": "4.17.1",
     "express-favicon": "^2.0.0",
     "hbs": "*",
     "less": "^2.7.2",
