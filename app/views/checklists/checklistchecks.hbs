@@ -22,7 +22,7 @@ dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
          <th>Check name</th>
          <th>What to do</th>
          <th>Mark</th>
-         <th>Comment</th>
+       <!--  <th>Comment</th> -->
          <th>Time/User</th>
          <th>Actions</th>
        </tr>
@@ -32,8 +32,18 @@ dcc_id: '7a35c0b9-2d04-41e9-b670-e0b767247223',
            <tr id="{{this.dcc_id}}">
              <td>{{this.dcc_name}}</td>
              <td>{{this.dcc_content}}</td>
-             <td id="pass{{this.dcc_id}}">{{this.dcc_pass}}</td>
-             <td>{{this.dcc_comment}}</td>
+             <td id="pass{{this.dcc_id}}">
+                {{#cond "this.dcc_pass ===null"}}
+                <span class="glyphicon glyphicon-question-sign"></span>
+                {{/cond}}
+                {{#cond "this.dcc_pass ===false"}}
+                <span class="glyphicon glyphicon-ban-circle" style="color:red"></span>
+                {{/cond}}
+                {{#cond "this.dcc_pass ===true"}}
+                <span class="glyphicon glyphicon-ok-circle" style="color:green"></span>
+                {{/cond}}
+             </td>
+           <!--  <td>{{this.dcc_comment}}</td> -->
              <td id="dts{{this.dcc_id}}">{{this.dcc_pass_dts}}/{{this.user_name}}</td>
              <td>
                <div class="btn-group">
