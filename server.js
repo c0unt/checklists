@@ -7,7 +7,7 @@ var express = require('express'),
 
 
 var app = express();
-
+require('console-stamp')(console, { pattern: 'dd/mm/yyyy HH:MM:ss.l' });
 
 
 // Configure config

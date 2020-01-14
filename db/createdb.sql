@@ -117,7 +117,7 @@ CREATE TABLE  IF NOT EXISTS   data_checklists (
 );
 
 
-ALTER TABLE  IF NOT EXISTS  data_checklists OWNER TO postgres;
+ALTER TABLE    data_checklists OWNER TO postgres;
 
 --
 -- Name: data_log; Type: TABLE; Schema: public; Owner: postgres
